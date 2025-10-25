@@ -1,0 +1,96 @@
+# =============== Unity .gitignore =================
+# Colocar este archivo en la raíz del proyecto Unity
+
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+MemoryCaptures/
+
+# Crashlytics / Fabric / Unity CacheServer / other caches
+UserSettings/
+UserSettings/*
+
+# Visual Studio / Rider / IDE files
+.vscode/
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build results
+*.apk
+*.aab
+*.app
+*.xcodeproj
+*.xcworkspace
+*.xcuserdata
+*.ipa
+*.unitypackage
+
+# Asset store tools
+Assets/AssetStoreTools*
+
+# Gradle / Android
+.gradle/
+gradle-app.setting
+.gradle/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Mono / .NET
+*.pidb
+*.log
+*.swp
+
+# External dependency directories (example)
+Packages/*/Plugins/*/lib/*.jar
+
+# Optional: track only required ProjectSettings, ignore local user settings:
+# (ProjectSettings/ sí debería versionarse; UserSettings/ es local y no necesario)
+# ProjectSettings/
+
+# ============= Git LFS / binaries (si usás LFS) ============
+# Recomiendo usar Git LFS para archivos grandes (psd, tga, png, fbx, mp4, etc.)
+# git lfs track "*.psd"
+# git lfs track "*.psb"
+# git lfs track "*.tga"
+# git lfs track "*.png"
+# git lfs track "*.jpg"
+# git lfs track "*.fbx"
+# git lfs track "*.mp4"
+# (Ejecutar `git lfs install` y luego `git add .gitattributes`)
+
+# ============= Unity YAML merge (opcional) ==============
+# Si configurás UnityYAMLMerge como merge tool, estas extensiones son textuales
+*.unity text merge=unityyamlmerge eol=lf
+*.prefab text merge=unityyamlmerge eol=lf
+*.asset text merge=unityyamlmerge eol=lf
+*.mat text merge=unityyamlmerge eol=lf
+
+# =======================================================
+# Fin .gitignore

@@ -1,0 +1,51 @@
+# Auto-detect text files and normalize to LF in the repo
+* text=auto
+
+# Force LF for Unity YAML/text assets (mejora merges y evita cambios por CRLF)
+*.unity     text eol=lf
+*.prefab    text eol=lf
+*.asset     text eol=lf
+*.anim      text eol=lf
+*.controller text eol=lf
+*.mat       text eol=lf
+*.shader    text eol=lf
+*.cginc     text eol=lf
+*.uxml      text eol=lf
+*.uss       text eol=lf
+*.asmdef    text eol=lf
+
+# Scripts -> LF
+*.cs        text eol=lf
+*.js        text eol=lf
+*.boo       text eol=lf
+
+# Packages & manifests (texto)
+Packages/manifest.json           text eol=lf
+Packages/packages-lock.json     text eol=lf
+ProjectSettings/*.asset         text eol=lf
+ProjectSettings/ProjectVersion.txt text eol=lf
+
+# Treat common binaries as binary (no EOL conversion, no merges)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.tga  binary
+*.psd  binary
+*.gif  binary
+*.mp4  binary
+*.mov  binary
+*.fbx  binary
+*.obj  binary
+*.wav  binary
+*.ogg  binary
+*.aiff binary
+*.zip  binary
+*.unitypackage binary
+*.dll  binary
+*.so   binary
+*.exe  binary
+
+# Ensure lock/metadata files are treated correctly
+*.meta    text eol=lf
+
+# End of file

@@ -152,6 +152,20 @@ namespace VTuberProject.Lighting
         }
 
         /// <summary>
+        /// Establece el multiplicador de intensidad para las luces exteriores (ventanas/cortinas)
+        /// </summary>
+        public void SetOutdoorLightsMultiplier(float multiplier)
+        {
+            foreach (var light in outdoorLights)
+            {
+                if (light != null && originalIntensities.ContainsKey(light))
+                {
+                    light.intensity = originalIntensities[light] * multiplier;
+                }
+            }
+        }
+
+        /// <summary>
         /// Cambia la intensidad global de forma suave
         /// </summary>
         public void SetGlobalIntensity(float target, float duration = 1f)

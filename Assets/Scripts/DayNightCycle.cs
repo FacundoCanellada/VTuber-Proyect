@@ -36,31 +36,31 @@ namespace VTuberProject.Lighting
         [Tooltip("Color de la luz al amanecer")]
         public Color sunriseColor = new Color(1f, 0.7f, 0.4f);
         
-        [Tooltip("Color de la luz al mediodía")]
-        public Color dayColor = new Color(1f, 0.95f, 0.9f);
+        [Tooltip("Color de la luz al mediodía - Cálido y suave")]
+        public Color dayColor = new Color(1f, 0.92f, 0.85f);
         
-        [Tooltip("Color de la luz al atardecer")]
-        public Color sunsetColor = new Color(1f, 0.5f, 0.3f);
+        [Tooltip("Color de la luz al atardecer - Rojizo/Anaranjado")]
+        public Color sunsetColor = new Color(1f, 0.45f, 0.25f);
         
-        [Tooltip("Color de la luz de noche")]
-        public Color nightColor = new Color(0.3f, 0.4f, 0.6f);
+        [Tooltip("Color de la luz de noche - Fría (luz artificial exterior)")]
+        public Color nightColor = new Color(0.35f, 0.45f, 0.65f);
 
         [Header("Intensity Settings")]
         [Tooltip("Intensidad de luz al amanecer")]
         [Range(0f, 2f)]
-        public float sunriseIntensity = 0.6f;
+        public float sunriseIntensity = 0.5f;
         
-        [Tooltip("Intensidad de luz al mediodía")]
+        [Tooltip("Intensidad de luz al mediodía - Tenue y difusa")]
         [Range(0f, 2f)]
-        public float dayIntensity = 1.2f;
+        public float dayIntensity = 0.7f;
         
-        [Tooltip("Intensidad de luz al atardecer")]
+        [Tooltip("Intensidad de luz al atardecer - Menos intensidad, más contraste")]
         [Range(0f, 2f)]
-        public float sunsetIntensity = 0.8f;
+        public float sunsetIntensity = 0.5f;
         
-        [Tooltip("Intensidad de luz de noche")]
+        [Tooltip("Intensidad de luz de noche - Muy reducida")]
         [Range(0f, 2f)]
-        public float nightIntensity = 0.2f;
+        public float nightIntensity = 0.15f;
 
         [Header("Time of Day Thresholds")]
         [Range(0f, 12f)]
@@ -76,13 +76,18 @@ namespace VTuberProject.Lighting
         public float nightStartHour = 20f;
 
         [Header("Indoor Lights Control")]
-        [Tooltip("Hora en que se encienden las luces interiores")]
+        [Tooltip("Hora en que se encienden las luces interiores automáticas")]
         [Range(12f, 24f)]
         public float lightsOnHour = 19f;
         
-        [Tooltip("Hora en que se apagan las luces interiores")]
+        [Tooltip("Hora en que se apagan las luces interiores automáticas")]
         [Range(0f, 12f)]
         public float lightsOffHour = 7f;
+
+        [Header("Window Light Settings")]
+        [Tooltip("Multiplicador para reducir intensidad de luces de ventana (cortinas)")]
+        [Range(0f, 1f)]
+        public float windowLightMultiplier = 0.4f; // 60% de reducción
 
         [Header("Debug")]
         public bool showDebugInfo = true;
@@ -211,6 +216,9 @@ namespace VTuberProject.Lighting
                     Debug.Log($"Indoor lights {(indoorLightsOn ? "ON" : "OFF")} at {currentTime:F1}h");
                 }
             }
+            
+            // Aplicar multiplicador a luces de ventana (cortinas)
+            lightingManager.SetOutdoorLightsMultiplier(windowLightMultiplier);
         }
 
         private TimeOfDay GetTimeOfDay()

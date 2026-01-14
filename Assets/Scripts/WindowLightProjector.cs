@@ -26,7 +26,7 @@ namespace VTuberProject.Lighting
         [Tooltip("Color de la luz exterior (sol/cielo)")]
         public Color lightColor = new Color(1f, 0.95f, 0.85f); // Luz solar cálida
         
-        [Range(0f, 3f)]
+        [Range(0f, 30f)]
         public float intensity = 1.2f;
         
         [Header("Animation")]
@@ -70,23 +70,40 @@ namespace VTuberProject.Lighting
         {
             if (light2D == null || lightCookie == null) return;
 
-            // Intentar asignar cookie usando reflexión para evitar errores
-            var lightType = light2D.GetType();
-            var prop = lightType.GetProperty("lightCookieSprite");
-            if (prop != null && prop.CanWrite)
+            // Para Unity 2021.2+ y URP 12+, el cookie se asigna directamente
+            // Si no funciona la reflexión, deberás asignarlo manualmente en el Inspector
+            try
             {
-                prop.SetValue(light2D, lightCookie, null);
-            }
-
-            // Algunos paquetes exponen un campo para el falloff; intentarlo también por reflexión
-            var falloffProp = lightType.GetProperty("lightCookieSpriteFalloff");
-            if (falloffProp != null && falloffProp.CanWrite)
-            {
-                try
+                #if UNITY_2021_2_OR_NEWER
+                // Método directo para versiones nuevas
+                var lightType = light2D.GetType();
+                var cookieField = lightType.GetField("m_LightCookieSprite", 
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                
+                if (cookieField != null)
                 {
-                    falloffProp.SetValue(light2D, 0.5f, null);
+                    cookieField.SetValue(light2D, lightCookie);
+                    Debug.Log($"Light cookie sprite assigned: {lightCookie.name}");
                 }
-                catch { }
+                else
+                {
+                    Debug.LogWarning("Could not find light cookie field. Please assign manually in Inspector under Light 2D > Cookie.");
+                }
+                #else
+                // Método con reflexión para versiones anteriores
+                var lightType = light2D.GetType();
+                var prop = lightType.GetProperty("lightCookieSprite");
+                if (prop != null && prop.CanWrite)
+                {
+                    prop.SetValue(light2D, lightCookie, null);
+                    Debug.Log($"Light cookie sprite assigned via property: {lightCookie.name}");
+                }
+                #endif
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Could not apply light cookie automatically: {e.Message}");
+                Debug.LogWarning("Please assign the Light Cookie Sprite manually in the Light 2D component Inspector.");
             }
         }
 

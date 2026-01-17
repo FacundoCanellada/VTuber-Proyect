@@ -26,6 +26,24 @@ public class PlayerMovementNew : MonoBehaviour
         {
             rb = GetComponent<Rigidbody2D>();
         }
+
+        // Configuración de seguridad para movimiento
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = 0f;
+            // Aseguramos que solo la rotación esté bloqueada, NO la posición
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.simulated = true;
+        }
+
+        // FIX CRITICO: Desactivar Root Motion del Animator para que no sobreescriba el movimiento
+        // Si el Animator tiene "Apply Root Motion", el personaje se quedará quieto aunque tenga velocidad
+        Animator anim = GetComponent<Animator>();
+        if (anim != null)
+        {
+            anim.applyRootMotion = false;
+        }
     }
 
     private void Update()
@@ -48,20 +66,37 @@ public class PlayerMovementNew : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (rb == null) return;
+        
         // Calcular velocidad
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
         Vector2 velocity = moveInput.normalized * currentSpeed;
         
-        // Aplicar movimiento
-        if (rb != null)
+        // Aplicar movimiento con velocity (compatible con todas las versiones)
+        rb.linearVelocity = velocity;
+        
+        animationController.UpdateAnimation(velocity);
+    }
+
+    // DEBUG: Detectar colisiones invisibles
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.LogWarning($"[COLLISION] Golpeando contra: '{collision.gameObject.name}' en la capa: {LayerMask.LayerToName(collision.gameObject.layer)}");
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        // Solo avisar si estamos intentando movernos pero estamos bloqueados
+        if (moveInput.magnitude > 0.1f)
         {
-            rb.linearVelocity = velocity;
-            animationController.UpdateAnimation(rb.linearVelocity);
-        }
-        else
-        {
-            transform.Translate(velocity * Time.fixedDeltaTime);
-            animationController.UpdateAnimationFromInput(moveInput.normalized, currentSpeed);
+            // Dibujar una línea roja hacia el objeto con el que chocamos para verlo en la escena
+            Debug.DrawLine(transform.position, collision.transform.position, Color.red);
+            // No spammear tanto la consola, pero mostrarlo
+            if (Time.frameCount % 60 == 0) // Cada ~1 segundo
+            {
+                 Debug.Log($"[BLOQUEO] Algo impide el paso: '{collision.gameObject.name}'");
+            }
         }
     }
 }
+

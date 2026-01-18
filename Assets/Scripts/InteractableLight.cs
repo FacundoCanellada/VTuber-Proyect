@@ -48,6 +48,13 @@ namespace VTuberProject.Lighting
         [Range(0f, 1f)]
         public float soundVolume = 0.5f;
 
+        [Header("Restrictions")]
+        [Tooltip("Si es true, la luz solo se podrá encender durante la noche")]
+        public bool onlyActiveAtNight = false;
+        
+        [Tooltip("Referencia al ciclo día/noche (necesaria si onlyActiveAtNight es true)")]
+        public DayNightCycle dayNightCycle;
+
         [Header("State")]
         [SerializeField]
         private bool isOn = false;
@@ -112,6 +119,22 @@ namespace VTuberProject.Lighting
         public void TurnOn()
         {
             if (isOn) return;
+
+            // Verificar restricción de noche
+            if (onlyActiveAtNight)
+            {
+                if (dayNightCycle == null) dayNightCycle = FindObjectOfType<DayNightCycle>();
+                
+                if (dayNightCycle != null)
+                {
+                    // Si no es de noche, no permitimos encender
+                    if (dayNightCycle.GetCurrentPeriod() != DayNightCycle.TimeOfDay.Night)
+                    {
+                        // Opcional: Podríamos reproducir un sonido de "error" o "click fallido" aquí
+                        return;
+                    }
+                }
+            }
             
             isOn = true;
             targetIntensity = onIntensity;

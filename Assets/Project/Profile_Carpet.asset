@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 755992aafd5b5784a8647b4dcef431d3, type: 3}
+  m_Name: Profile_Carpet
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceProfile
+  surfaceType: 1
+  walkClips:
+  - {fileID: 8300000, guid: 864bdc2aaf29052449d12b6ae43ce1de, type: 3}
+  - {fileID: 8300000, guid: 82348ba17e748f74091d53aa6b50d5d3, type: 3}
+  - {fileID: 8300000, guid: ea11104795364a04296616902f33827e, type: 3}
+  runClips:
+  - {fileID: 8300000, guid: a6b5bccb0364b2246acd324ef0d1ba91, type: 3}
+  - {fileID: 8300000, guid: 180d5186d11356b4cb799bcccf0a2bbd, type: 3}
+  - {fileID: 8300000, guid: 116100aa17fe03f40aedf399cc5f746b, type: 3}
+  landClips: []

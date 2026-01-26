@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 755992aafd5b5784a8647b4dcef431d3, type: 3}
+  m_Name: Profile_Wood
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceProfile
+  surfaceType: 0
+  walkClips:
+  - {fileID: 8300000, guid: 3ba7c3b3a1dcdfb4681b8c8b8ddc6671, type: 3}
+  - {fileID: 8300000, guid: d03e55916e325ca4489b223c51718b5a, type: 3}
+  - {fileID: 8300000, guid: 63481b6d5a7c2744089c712444cba28e, type: 3}
+  runClips:
+  - {fileID: 8300000, guid: df1c36cfc8ab1524ab7320dee639b86a, type: 3}
+  - {fileID: 8300000, guid: 181e7a403ecaf18458f7cc4549a64e69, type: 3}
+  - {fileID: 8300000, guid: 277a8a093fc8ac94dbbc8808eb56e218, type: 3}
+  landClips: []

@@ -22,6 +22,7 @@ public class PlayerAnimationController : MonoBehaviour
     private int isRunningParamID;
     private int moveXParamID;
     private int moveYParamID;
+    private int isAFKParamID;
     
     // Valores actuales para suavizado
     private float currentSpeed;
@@ -45,6 +46,7 @@ public class PlayerAnimationController : MonoBehaviour
         isRunningParamID = Animator.StringToHash("IsRunning");
         moveXParamID = Animator.StringToHash("MoveX");
         moveYParamID = Animator.StringToHash("MoveY");
+        isAFKParamID = Animator.StringToHash("IsAFK");
     }
     
     /// <summary>
@@ -113,6 +115,16 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetFloat(moveXParamID, direction.x);
         animator.SetFloat(moveYParamID, direction.y);
         currentDirection = direction;
+    }
+
+    /// <summary>
+    /// Establece el estado de AFK (Away From Keyboard) en el Animator
+    /// </summary>
+    /// <param name="isAFK">True si el jugador está AFK, False si vuelve a la actividad</param>
+    public void SetAFK(bool isAFK)
+    {
+        if (animator == null) return;
+        animator.SetBool(isAFKParamID, isAFK);
     }
     
     /// <summary>

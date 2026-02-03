@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: c0b9d92e23df399478a63008577f78e2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6155995948716351695
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_0
+  - first:
+      213: -3503984508898222894
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_1
+  - first:
+      213: 6906812393091921385
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_2
+  - first:
+      213: -678123519405628206
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_3
+  - first:
+      213: -1994725071212520559
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_4
+  - first:
+      213: 7142862171322014632
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_5
+  - first:
+      213: -716310225067028337
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_6
+  - first:
+      213: 3278983044803574584
+    second: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 1
+        width: 18
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13f940eec42819aa0800000000000000
+      internalID: -6155995948716351695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 1
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dc56a077a85f5fc0800000000000000
+      internalID: -3503984508898222894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e57284174de9df50800000000000000
+      internalID: 6906812393091921385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 1
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d46dff7042d696f0800000000000000
+      internalID: -678123519405628206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 1
+        width: 17
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19bdfc1cd105154e0800000000000000
+      internalID: -1994725071212520559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ab5931ec4b802360800000000000000
+      internalID: 7142862171322014632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 1
+        width: 17
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8056ed35a72f06f0800000000000000
+      internalID: -716310225067028337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 1
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83bbb0ad4b9418d20800000000000000
+      internalID: 3278983044803574584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_0: -6155995948716351695
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_1: -3503984508898222894
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_2: 6906812393091921385
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_3: -678123519405628206
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_4: -1994725071212520559
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_5: 7142862171322014632
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_6: -716310225067028337
+      Ahiiruw_AFK_espalda_derecha_levantarse_V001-Sheet_7: 3278983044803574584
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

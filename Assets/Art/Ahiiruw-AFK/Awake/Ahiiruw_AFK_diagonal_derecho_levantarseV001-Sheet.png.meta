@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: 426da4ef6a623b44ea0e1fcc32c63964
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5904653401384832295
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_0
+  - first:
+      213: -4749096657944980272
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_1
+  - first:
+      213: -2235228473507815284
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_2
+  - first:
+      213: 3417716080582315805
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_3
+  - first:
+      213: -1155449753463381647
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_4
+  - first:
+      213: -1448591545922555668
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_5
+  - first:
+      213: 5711580278771038679
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_6
+  - first:
+      213: -7508874893189179366
+    second: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72d485ffbfa81f150800000000000000
+      internalID: 5904653401384832295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d4d13b50c1d71eb0800000000000000
+      internalID: -4749096657944980272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c806abccb8fdaf0e0800000000000000
+      internalID: -2235228473507815284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1fcf3edaaa2e6f20800000000000000
+      internalID: 3417716080582315805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 1
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 171a001329407ffe0800000000000000
+      internalID: -1155449753463381647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 1
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce0f6a8f9a195ebe0800000000000000
+      internalID: -1448591545922555668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 1
+        width: 16
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d93646900c934f40800000000000000
+      internalID: 5711580278771038679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 1
+        width: 15
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a181c90811e1bc790800000000000000
+      internalID: -7508874893189179366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_0: 5904653401384832295
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_1: -4749096657944980272
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_2: -2235228473507815284
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_3: 3417716080582315805
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_4: -1155449753463381647
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_5: -1448591545922555668
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_6: 5711580278771038679
+      Ahiiruw_AFK_diagonal_derecho_levantarseV001-Sheet_7: -7508874893189179366
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

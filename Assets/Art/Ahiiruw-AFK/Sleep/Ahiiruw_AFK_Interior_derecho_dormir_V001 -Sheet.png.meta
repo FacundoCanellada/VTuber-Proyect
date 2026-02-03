@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: 5aea5d5a860b6444ca7fcef852b256c0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6898395653526269628
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_0
+  - first:
+      213: -5487197473763533710
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_1
+  - first:
+      213: 7863490548004250908
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_2
+  - first:
+      213: 3310824206038881722
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_3
+  - first:
+      213: -3689146586539069225
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_4
+  - first:
+      213: 9010854094778205087
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_5
+  - first:
+      213: 2777429874003060935
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_6
+  - first:
+      213: 3571948373037334096
+    second: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 3
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbe28803c460cbf50800000000000000
+      internalID: 6898395653526269628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 3
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27c57e358fe89d3b0800000000000000
+      internalID: -5487197473763533710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 3
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c156f68adfab02d60800000000000000
+      internalID: 7863490548004250908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 3
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab556bae21962fd20800000000000000
+      internalID: 3310824206038881722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d07ef8b9b48dccc0800000000000000
+      internalID: -3689146586539069225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f930122ce0cfc0d70800000000000000
+      internalID: 9010854094778205087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c8a28441c96b8620800000000000000
+      internalID: 2777429874003060935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 3
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05ebceace1c129130800000000000000
+      internalID: 3571948373037334096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_0: 6898395653526269628
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_1: -5487197473763533710
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_2: 7863490548004250908
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_3: 3310824206038881722
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_4: -3689146586539069225
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_5: 9010854094778205087
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_6: 2777429874003060935
+      Ahiiruw_AFK_Interior_derecho_dormir_V001 -Sheet_7: 3571948373037334096
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

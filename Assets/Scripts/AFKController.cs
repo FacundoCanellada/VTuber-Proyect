@@ -151,4 +151,29 @@ public class AFKController : MonoBehaviour
             animationController.SetAFK(false);
         }
     }
+
+    /// <summary>
+    /// Devuelve TRUE si el personaje está AFK o está en pleno proceso de levantarse.
+    /// Esto sirve para bloquear el movimiento hasta que termine la animación.
+    /// </summary>
+    public bool IsBlockingMovement()
+    {
+        // 1. Si estamos oficialmente AFK, bloqueamos.
+        if (isAFK) return true;
+
+        // 2. Si NO estamos AFK, pero la animación sigue siendo "Wake" (levantándose), bloqueamos.
+        if (animator != null)
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            
+            // Verifica si estamos en el estado de levantarse (asegúrate que el nombre coincida con tu Animator)
+            bool isWakingUp = stateInfo.IsName("AFK_Wake") || 
+                              stateInfo.IsName("AFK_System.AFK_Wake") ||
+                              stateInfo.IsTag("Wake"); // Tip: Puedes ponerle el Tag "Wake" al estado en el Animator
+            
+            if (isWakingUp) return true;
+        }
+
+        return false;
+    }
 }

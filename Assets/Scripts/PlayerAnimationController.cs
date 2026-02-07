@@ -17,6 +17,10 @@ public class PlayerAnimationController : MonoBehaviour
     [Tooltip("Suavizado de las transiciones de animación (mayor = más suave)")]
     [SerializeField] private float animationSmoothTime = 0.1f;
     
+    [Header("Estilo Retro (Undertale)")]
+    [Tooltip("Si es TRUE, el personaje cambiará de dirección instantáneamente sin suavizado (efecto glitchy/snappy).")]
+    [SerializeField] private bool useRetroMovement = true;
+
     // IDs de los parámetros del Animator (optimización)
     private int speedParamID;
     private int isRunningParamID;
@@ -73,20 +77,37 @@ public class PlayerAnimationController : MonoBehaviour
         // Si hay movimiento, actualizar la dirección
         if (velocity.magnitude > 0.01f)
         {
-            // Normalizar la dirección
             Vector2 targetDirection = velocity.normalized;
-            
-            // Suavizar la dirección
-            currentDirection = Vector2.SmoothDamp(
-                currentDirection, 
-                targetDirection, 
-                ref smoothVelocity, 
-                animationSmoothTime
-            );
-            
-            // Actualizar parámetros de dirección
-            animator.SetFloat(moveXParamID, currentDirection.x);
-            animator.SetFloat(moveYParamID, currentDirection.y);
+
+            if (useRetroMovement)
+            {
+                // Lógica RETRO (Undertale): Snapping instantáneo
+                // Redondeamos para que sean valores duros (-1, 0, 1) evitando decimales intermedios
+                float snapX = 0;
+                float snapY = 0;
+
+                // Prioridad simple: Quien tenga mayor magnitud gana, o si son iguales, diagonales puras
+                if (Mathf.Abs(velocity.x) > 0.01f) snapX = Mathf.Sign(velocity.x);
+                if (Mathf.Abs(velocity.y) > 0.01f) snapY = Mathf.Sign(velocity.y);
+
+                currentDirection = new Vector2(snapX, snapY);
+                
+                animator.SetFloat(moveXParamID, currentDirection.x);
+                animator.SetFloat(moveYParamID, currentDirection.y);
+            }
+            else
+            {
+                // Lógica Moderna: Suavizado (SmoothDamp)
+                currentDirection = Vector2.SmoothDamp(
+                    currentDirection, 
+                    targetDirection, 
+                    ref smoothVelocity, 
+                    animationSmoothTime
+                );
+                
+                animator.SetFloat(moveXParamID, currentDirection.x);
+                animator.SetFloat(moveYParamID, currentDirection.y);
+            }
         }
         // Si no hay movimiento, mantener la última dirección para el Idle
     }

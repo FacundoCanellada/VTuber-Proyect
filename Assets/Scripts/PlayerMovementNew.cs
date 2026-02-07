@@ -13,6 +13,7 @@ public class PlayerMovementNew : MonoBehaviour
     
     [Header("Referencias")]
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private AFKController afkController;
     
     private PlayerAnimationController animationController;
     private Vector2 moveInput;
@@ -22,10 +23,8 @@ public class PlayerMovementNew : MonoBehaviour
     {
         animationController = GetComponent<PlayerAnimationController>();
         
-        if (rb == null)
-        {
-            rb = GetComponent<Rigidbody2D>();
-        }
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        if (afkController == null) afkController = GetComponent<AFKController>(); // Intentar autodetectar
 
         // Configuración de seguridad para movimiento
         if (rb != null)
@@ -68,6 +67,13 @@ public class PlayerMovementNew : MonoBehaviour
     {
         if (rb == null) return;
         
+        // Bloqueo por AFK (Evita el "patinado")
+        if (afkController != null && afkController.IsBlockingMovement())
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         // Calcular velocidad
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
         Vector2 velocity = moveInput.normalized * currentSpeed;

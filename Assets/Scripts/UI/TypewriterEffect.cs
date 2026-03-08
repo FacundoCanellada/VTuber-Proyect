@@ -42,23 +42,51 @@ public class TypewriterEffect : MonoBehaviour
         _typingCoroutine = StartCoroutine(TypeRoutine(text, onComplete));
     }
 
+    /// <summary>
+    /// Clears the text immediately without typing effect.
+    /// </summary>
+    public void ClearText()
+    {
+        if (_tmpText != null) _tmpText.text = "";
+    }
+
     private IEnumerator TypeRoutine(string text, System.Action onComplete)
     {
         IsTyping = true;
-        _tmpText.text = ""; // Clear text initially
-        
-        // Wait one frame to ensure rect transform updates
-        yield return null;
+        _tmpText.text = ""; 
 
-        for (int i = 0; i < text.Length; i++)
+        // Handle Unity Inspector newlines just in case user types literal "\n"
+        text = text.Replace("\\n", "\n");
+
+        // Rich Text parser (simple version)
+        int i = 0;
+        float wait = typingSpeed;
+
+        while (i < text.Length)
         {
+            if (text[i] == '<')
+            {
+                // Found potential tag start
+                int closeIndex = text.IndexOf('>', i);
+                if (closeIndex != -1)
+                {
+                    // It's a tag, append completely without waiting
+                    string tag = text.Substring(i, closeIndex - i + 1);
+                    _tmpText.text += tag;
+                    i = closeIndex + 1;
+                    continue; // Skip the delay
+                }
+            }
+
             _tmpText.text += text[i];
             
-            // Play sound logic
-            PlayVoiceSound();
+            if (!char.IsWhiteSpace(text[i]))
+            {
+                PlayVoiceSound();
+            }
 
-            // Usamos WaitForSecondsRealtime para que funcione incluso si Time.timeScale es 0 (Juego pausado)
-            yield return new WaitForSecondsRealtime(typingSpeed);
+            i++;
+            yield return new WaitForSecondsRealtime(wait);
         }
 
         IsTyping = false;

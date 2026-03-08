@@ -1,6 +1,9 @@
 using System.Collections;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class IntroController : MonoBehaviour
@@ -27,19 +30,35 @@ public class IntroController : MonoBehaviour
 
     [Header("Audio")]
     public AudioSource backgroundMusicSource;
+    [Tooltip("AudioSource dedicado para efectos de sonido UI. Si no se asigna, se crea uno automáticamente.")]
+    public AudioSource sfxAudioSource;
     [Tooltip("Sonido de fondo (loop) para la decisión.")]
     public AudioClip decisionLoopClip;
     [Tooltip("Sonido al cambiar de opción (Navegación UI).")]
     public AudioClip navigationSFX;
+    [Range(0f, 1f)] public float navigationSFXVolume = 0.7f;
+    [Tooltip("Sonido al confirmar la selección (botón de aceptar).")]
+    public AudioClip confirmSFX;
+    [Range(0f, 1f)] public float confirmSFXVolume = 0.8f;
 
-    [Header("Dialogues")]
-    [TextArea] public string introDialogueText = "¿Quieres ser mi amigo?";
-    public string optionYesLabel = "Zhy ta bien"; // Label for the Positive choice
-    public string optionNoLabel = "Nel perro";    // Label for the Negative choice
+    [Header("Dialogues Sequence")]
+    [Tooltip("Lista de textos que aparecerán uno tras otro.")]
+    [TextArea] public string[] introTexts; // Replaces single text
+
+    // Obsolete but kept to avoid breaking serialized references if any (though logic will change)
+    // [TextArea] public string introDialogueText = "¿Quieres ser mi amigo?"; 
+
+    public string optionYesLabel = "Zhy ta bien"; 
+    public string optionNoLabel = "Nel perro";    
 
     [Header("Settings")]
     public float initialDelay = 1f;
-    public float decisionAppearanceTime = 15f;
+    public float textReadingTime = 3f; // Time to read each text
+    public float fadeOutTime = 1f;
+
+    [Header("Animation Settings")]
+    public float optionMoveDistance = 20f; // Distance to move up when selected
+    public float optionMoveDuration = 0.2f; // Animation duration
     [Tooltip("Curva para la animación de Slide Up del texto.")]
     public AnimationCurve slideCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [Tooltip("Curva para el Fade In del texto.")]
@@ -49,9 +68,27 @@ public class IntroController : MonoBehaviour
     [Tooltip("Duración de la animación de entrada del texto.")]
     public float textEntranceDuration = 1.5f;
 
+    [Header("Ending Sequence")]
+    public AudioClip endingSong;
+    public float zoomDuration = 2f;
+    [Tooltip("CinemachineCamera de la escena (obligatorio para el zoom).")]
+    public CinemachineCamera cinemachineCamera;
+    [Tooltip("OrthographicSize al hacer zoom in (más chico = más cerca). El valor normal se lee automáticamente.")]
+    public float targetZoomSize = 1.5f;
+
+    [Header("Blur (Desenfoque)")]
+    [Tooltip("Intensidad máxima del blur al inicio del ending (1.5 = fuerte).")]
+    [Range(0.1f, 1.5f)] public float maxBlurRadius = 1.5f;
+    [Tooltip("Duración del fade del blur (de borroso a normal).")]
+    public float blurFadeDuration = 2.5f;
+
     [Header("Colors")]
-    public Color selectedColor = Color.cyan;
-    public Color normalColor = Color.white;
+    [Tooltip("Color de la opción seleccionada al navegar.")]
+    public Color selectedColor = Color.white;
+    [Tooltip("Color normal de las opciones (cyan).")]
+    public Color normalColor = Color.cyan;
+    [Tooltip("Color al confirmar la opción (amarillo).")]
+    public Color confirmColor = Color.yellow;
 
     [Header("Game Control")]
     [Tooltip("El Panel Negro que cubre toda la pantalla.")]
@@ -60,22 +97,43 @@ public class IntroController : MonoBehaviour
     private bool _decisionActive = false;
     private bool _selectedYes = true; // Default selection (e.g. Yes on right/left?)
 
+    private Vector2 _yesOriginalPos;
+    private Vector2 _noOriginalPos;
+    private Vector2 _textContainerOriginalPos;
+
+    // Blur
+    private Volume _blurVolume;
+    private DepthOfField _dof;
+
     private void Awake()
     {
-        // 0. Immediate Setup (Antes de que nada se renderice si es posible)
+        // 0. Immediate Setup
         if (blackOverlayCanvasGroup != null) 
         {
-            blackOverlayCanvasGroup.alpha = 1f; // Pantalla negra TOTAL
+            blackOverlayCanvasGroup.alpha = 1f; 
             blackOverlayCanvasGroup.gameObject.SetActive(true);
         }
 
-        // Setup initial text fading (CanvasGroup)
+        // Setup Fade
         if (textContainer != null)
         {
+            _textContainerOriginalPos = textContainer.anchoredPosition; // Store stable position
             _textCanvasGroup = textContainer.GetComponent<CanvasGroup>();
-            // If it doesn't exist, we add it automatically for the Fade effect
             if (_textCanvasGroup == null) _textCanvasGroup = textContainer.gameObject.AddComponent<CanvasGroup>();
+            _textCanvasGroup.alpha = 0f; // Start invisible
         }
+
+        // Crear SFX AudioSource si no se asignó
+        if (sfxAudioSource == null)
+        {
+            sfxAudioSource = gameObject.AddComponent<AudioSource>();
+            sfxAudioSource.playOnAwake = false;
+            sfxAudioSource.loop = false;
+        }
+
+        // Store original positions for UI Animation
+        if (yesButton != null) _yesOriginalPos = yesButton.GetComponent<RectTransform>().anchoredPosition;
+        if (noButton != null) _noOriginalPos = noButton.GetComponent<RectTransform>().anchoredPosition;
     }
 
     private void Start()
@@ -89,6 +147,9 @@ public class IntroController : MonoBehaviour
             Camera.main.backgroundColor = Color.black;
             Camera.main.clearFlags = CameraClearFlags.SolidColor;
         }
+
+        // Setup blur effect (se activa desde el principio)
+        SetupBlurEffect();
 
         // Setup initial fade state
         if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
@@ -109,37 +170,78 @@ public class IntroController : MonoBehaviour
         if (_decisionActive)
         {
             HandleInput();
+            // Continuously update visuals for smooth animation
+            UpdateSelectionVisuals();
         }
     }
 
     private IEnumerator IntroSequence()
     {
-        // 1. Wait standard 1 second delay (Realtime because TimeScale is 0)
+        // 1. Initial Delay
         yield return new WaitForSecondsRealtime(initialDelay);
 
-        // 2. Animate Text Entrance (Slide Up + Fade In) (Using unscaled time)
-        StartCoroutine(AnimateTextEntrance());
-
-        // 3. Start Typing
-        // "En el segundo 1 aparece texto... Voz de Ahiiruw..."
-        if (typewriter != null)
+        // 2. Iterate through all texts
+        if (introTexts != null && typewriter != null)
         {
-            typewriter.ShowText(introDialogueText);
+            for (int i = 0; i < introTexts.Length; i++)
+            {
+                string line = introTexts[i];
+
+                // Stop any previous animations/fades
+                if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
+                // Clear text so we don't see previous text fading up
+                typewriter.ClearText();
+
+                // Reset Pos for entrance
+                if (textContainer != null) 
+                {
+                   textContainer.anchoredPosition = _textContainerOriginalPos;
+                }
+
+                // Animate Entrance (Slide Up + Fade In)
+                yield return StartCoroutine(AnimateTextEntrance());
+
+                // Typewriter
+                bool typingFinished = false;
+                typewriter.ShowText(line, () => typingFinished = true);
+                
+                // Wait for typing
+                while (!typingFinished) yield return null;
+                
+                // Wait for reading time
+                yield return new WaitForSecondsRealtime(textReadingTime);
+
+                // Fade Out ONLY if NOT the last text
+                if (i < introTexts.Length - 1)
+                {
+                    yield return StartCoroutine(AnimateTextExit());
+                }
+            }
         }
 
-        // 4. Wait until the decision time arrives
-        float timeRemaining = decisionAppearanceTime - initialDelay;
-        if (timeRemaining > 0) yield return new WaitForSecondsRealtime(timeRemaining);
-
-        // 5. Show Decision
+        // 3. Show Decision (Keep last text visible)
         ShowDecision();
+    }
+
+    private IEnumerator AnimateTextExit()
+    {
+        if (_textCanvasGroup == null) yield break;
+        float timer = 0f;
+        while (timer < fadeOutTime)
+        {
+            float progress = timer / fadeOutTime;
+            _textCanvasGroup.alpha = Mathf.Lerp(1f, 0f, progress);
+            timer += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        _textCanvasGroup.alpha = 0f;
     }
 
     private IEnumerator AnimateTextEntrance()
     {
         if (textContainer == null) yield break;
 
-        Vector2 endPos = textContainer.anchoredPosition;
+        Vector2 endPos = _textContainerOriginalPos;
         Vector2 startPos = endPos - new Vector2(0, slideDistance);
         
         float timer = 0f;
@@ -202,10 +304,10 @@ public class IntroController : MonoBehaviour
 
         if (changed)
         {
-            // Reproducir sonido de navegación
-            if (backgroundMusicSource != null && navigationSFX != null)
+            // Reproducir sonido de navegación con AudioSource dedicado
+            if (sfxAudioSource != null && navigationSFX != null)
             {
-                backgroundMusicSource.PlayOneShot(navigationSFX);
+                sfxAudioSource.PlayOneShot(navigationSFX, navigationSFXVolume);
             }
         }
     
@@ -217,85 +319,185 @@ public class IntroController : MonoBehaviour
 
     private void UpdateSelectionVisuals()
     {
-        // Solicitud del usuario: Solo cambiar el color del TEXTO.
-        // Aseguramos que el Alpha sea 1 (visible) siempre.
-        
+        // Highlight logic
+        if (yesButton == null || noButton == null) return;
+
+        RectTransform yesRect = yesButton.GetComponent<RectTransform>();
+        RectTransform noRect = noButton.GetComponent<RectTransform>();
+
+        // Interpolation factor for smooth animation (Time.unscaledDeltaTime * speed)
+        float speed = 10f; 
+        float step = Time.unscaledDeltaTime * speed;
+
         if (yesOptionText != null)
         {
-            Color targetColor = _selectedYes ? selectedColor : normalColor;
-            targetColor.a = 1f; // Force Alpha to 1
-            yesOptionText.color = targetColor;
+            yesOptionText.color = _selectedYes ? selectedColor : normalColor;
+            // Target Position
+            Vector2 targetYes = _yesOriginalPos + (_selectedYes ? new Vector2(0, optionMoveDistance) : Vector2.zero);
+            yesRect.anchoredPosition = Vector2.Lerp(yesRect.anchoredPosition, targetYes, step);
         }
 
         if (noOptionText != null)
         {
-            Color targetColor = !_selectedYes ? selectedColor : normalColor;
-            targetColor.a = 1f; // Force Alpha to 1
-            noOptionText.color = targetColor;
+            noOptionText.color = !_selectedYes ? selectedColor : normalColor;
+            // Target Position
+            Vector2 targetNo = _noOriginalPos + (!_selectedYes ? new Vector2(0, optionMoveDistance) : Vector2.zero);
+            noRect.anchoredPosition = Vector2.Lerp(noRect.anchoredPosition, targetNo, step);
         }
     }
 
     private void MakeDecision()
     {
         _decisionActive = false;
+
+        // Cambiar a amarillo la opción elegida
+        if (_selectedYes && yesOptionText != null)
+            yesOptionText.color = confirmColor;
+        else if (!_selectedYes && noOptionText != null)
+            noOptionText.color = confirmColor;
+
+        // Sonido de confirmación (botón)
+        if (sfxAudioSource != null && confirmSFX != null)
+        {
+            sfxAudioSource.PlayOneShot(confirmSFX, confirmSFXVolume);
+        }
         
         if (_selectedYes)
         {
-            // "zhy ta bien" -> LC +9% (43 -> 52%)
-           TrustManager.Instance.ModifyLC(9f);
-           Debug.Log("Jugador aceptó la amistad: Ahiiruw se vuelve más activa.");
+            TrustManager.Instance.ModifyLC(9f);
         }
         else
         {
-            // "nel perro" -> LC -9% (43 -> 34%)
             TrustManager.Instance.ModifyLC(-9f);
-            Debug.Log("Jugador rechazó la amistad: Relación distante inicial.");
         }
 
-        // Proceed to end intro sequence
-        StartCoroutine(EndIntroSequence());
+        // Start Ending Sequence (Song + Blur + Zoom)
+        StartCoroutine(EndingSequence());
     }
 
-    private IEnumerator EndIntroSequence()
+    private IEnumerator EndingSequence()
     {
-        // 1. Hide decision panel immediately
+        // 1. Reproducir canción de confirmación
+        if (backgroundMusicSource != null && endingSong != null)
+        {
+            backgroundMusicSource.Stop();
+            backgroundMusicSource.clip = endingSong;
+            backgroundMusicSource.loop = false;
+            backgroundMusicSource.Play();
+        }
+
+        // 2. Ocultar UI de decisión
         if (decisionPanel != null) decisionPanel.SetActive(false);
+        if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
 
-        // 2. Hide intro text immediately
-        if (_textCanvasGroup != null) 
-        {
-            _textCanvasGroup.alpha = 0f;
-        }
-        else if (textContainer != null)
-        {
-             // Si por alguna razón no hay canvas group, desactiva el objeto
-             textContainer.gameObject.SetActive(false);
-        }
-
-        // 3. Fade Out Black Overlay
-        if (blackOverlayCanvasGroup != null)
-        {
-            float timer = 0f;
-            float duration = 2.0f; // 2 seconds fade out
-            while (timer < duration)
-            {
-                float progress = timer / duration;
-                // Fade from 1 (black) to 0 (transparent)
-                blackOverlayCanvasGroup.alpha = Mathf.Lerp(1f, 0f, progress);
-                // Also fade out intro music
-                if (backgroundMusicSource != null) backgroundMusicSource.volume = Mathf.Lerp(0.2f, 0f, progress);
-
-                timer += Time.unscaledDeltaTime; // Use unscaled time
-                yield return null;
-            }
-            blackOverlayCanvasGroup.alpha = 0f;
-            blackOverlayCanvasGroup.gameObject.SetActive(false);
-        }
-
-        // 4. Enable Gameplay Logic (Resume Time)
+        // 3. Restaurar timeScale ANTES del zoom para que Cinemachine funcione
         Time.timeScale = 1f;
 
-        // 5. Destroy IntroController or just disable.
-        this.enabled = false; 
+        // 4. Zoom con Cinemachine + Blur
+        if (cinemachineCamera != null)
+        {
+            float startSize = cinemachineCamera.Lens.OrthographicSize;
+            float timer = 0f;
+
+            // FASE 1: Overlay se desvanece → revela el mundo BORROSO + Zoom In
+            while (timer < zoomDuration)
+            {
+                float progress = timer / zoomDuration;
+                float smoothProgress = Mathf.SmoothStep(0f, 1f, progress);
+
+                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(startSize, targetZoomSize, smoothProgress);
+
+                if (blackOverlayCanvasGroup != null)
+                    blackOverlayCanvasGroup.alpha = Mathf.Lerp(1f, 0f, smoothProgress);
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            cinemachineCamera.Lens.OrthographicSize = targetZoomSize;
+            if (blackOverlayCanvasGroup != null) blackOverlayCanvasGroup.alpha = 0f;
+
+            // Mantener un momento (borroso y cerca)
+            yield return new WaitForSeconds(1f);
+
+            // FASE 2: Blur se limpia + Zoom Out simultáneo
+            timer = 0f;
+            float totalDuration = Mathf.Max(zoomDuration, blurFadeDuration);
+            while (timer < totalDuration)
+            {
+                // Zoom out
+                float zoomProgress = Mathf.Clamp01(timer / zoomDuration);
+                float smoothZoom = Mathf.SmoothStep(0f, 1f, zoomProgress);
+                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(targetZoomSize, startSize, smoothZoom);
+
+                // Blur fade out
+                float blurProgress = Mathf.Clamp01(timer / blurFadeDuration);
+                if (_dof != null)
+                    _dof.gaussianMaxRadius.Override(Mathf.Lerp(maxBlurRadius, 0f, blurProgress));
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            cinemachineCamera.Lens.OrthographicSize = startSize;
+        }
+        else
+        {
+            // Fallback sin Cinemachine: solo desvanecer overlay + blur
+            Debug.LogWarning("[IntroController] No se asignó CinemachineCamera. El zoom no funcionará.");
+            float timer = 0f;
+            while (timer < zoomDuration)
+            {
+                float progress = timer / zoomDuration;
+                if (blackOverlayCanvasGroup != null)
+                    blackOverlayCanvasGroup.alpha = Mathf.Lerp(1f, 0f, progress);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            if (blackOverlayCanvasGroup != null) blackOverlayCanvasGroup.alpha = 0f;
+
+            yield return new WaitForSeconds(1f);
+
+            // Solo blur fade
+            timer = 0f;
+            while (timer < blurFadeDuration)
+            {
+                float progress = timer / blurFadeDuration;
+                if (_dof != null)
+                    _dof.gaussianMaxRadius.Override(Mathf.Lerp(maxBlurRadius, 0f, progress));
+                timer += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        // 5. Limpiar blur completamente
+        if (_dof != null) _dof.gaussianMaxRadius.Override(0f);
+        if (_blurVolume != null) Destroy(_blurVolume.gameObject);
+
+        // 6. Desactivar overlay y controller
+        if (blackOverlayCanvasGroup != null) blackOverlayCanvasGroup.gameObject.SetActive(false);
+        this.enabled = false;
+    }
+
+    private void SetupBlurEffect()
+    {
+        // Habilitar post-procesado en la cámara
+        if (Camera.main != null)
+        {
+            var camData = Camera.main.GetUniversalAdditionalCameraData();
+            if (camData != null)
+                camData.renderPostProcessing = true;
+        }
+
+        // Crear Volume global para el blur
+        var volumeObj = new GameObject("_IntroBlurVolume");
+        _blurVolume = volumeObj.AddComponent<Volume>();
+        _blurVolume.isGlobal = true;
+        _blurVolume.priority = 100;
+        _blurVolume.profile = ScriptableObject.CreateInstance<VolumeProfile>();
+
+        _dof = _blurVolume.profile.Add<DepthOfField>(true);
+        _dof.mode.Override(DepthOfFieldMode.Gaussian);
+        _dof.gaussianStart.Override(0f);
+        _dof.gaussianEnd.Override(0.01f);
+        _dof.gaussianMaxRadius.Override(maxBlurRadius);
     }
 }

@@ -6,8 +6,8 @@ using UnityEngine;
 public class TypewriterEffect : MonoBehaviour
 {
     [Header("Settings")]
-    [Tooltip("Tiempo en segundos por cada carácter.")]
-    public float typingSpeed = 0.05f;
+    [Tooltip("Tiempo en segundos por cada carácter (más alto = más lento).")]
+    public float typingSpeed = 0.09f;
 
     [Header("Audio")]
     [Tooltip("El AudioSource que reproducirá los sonidos.")]

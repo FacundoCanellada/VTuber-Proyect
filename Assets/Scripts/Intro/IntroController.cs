@@ -29,11 +29,20 @@ public class IntroController : MonoBehaviour
     public Button noButton;
 
     [Header("Audio")]
-    public AudioSource backgroundMusicSource;
+    [Tooltip("AudioSource para la música de intro (suena al inicio, NO loop).")]
+    public AudioSource introMusicSource;
+    [Tooltip("Clip de música que suena durante la intro (se reproduce una sola vez).")]
+    public AudioClip introMusicClip;
+    [Range(0f, 1f)] public float introMusicVolume = 0.2f;
+
+    [Tooltip("AudioSource para la música de la habitación (loop, se activa al confirmar).")]
+    public AudioSource roomMusicSource;
+    [Tooltip("Clip de música ambiental de la habitación (loop, se combina con la intro).")]
+    public AudioClip roomMusicClip;
+    [Range(0f, 1f)] public float roomMusicVolume = 0.3f;
+
     [Tooltip("AudioSource dedicado para efectos de sonido UI. Si no se asigna, se crea uno automáticamente.")]
     public AudioSource sfxAudioSource;
-    [Tooltip("Sonido de fondo (loop) para la decisión.")]
-    public AudioClip decisionLoopClip;
     [Tooltip("Sonido al cambiar de opción (Navegación UI).")]
     public AudioClip navigationSFX;
     [Range(0f, 1f)] public float navigationSFXVolume = 0.7f;
@@ -69,7 +78,8 @@ public class IntroController : MonoBehaviour
     public float textEntranceDuration = 1.5f;
 
     [Header("Ending Sequence")]
-    public AudioClip endingSong;
+    [Tooltip("Duración de la pantalla negra sin texto antes de revelar la escena.")]
+    public float blackScreenDuration = 2.5f;
     public float zoomDuration = 2f;
     [Tooltip("CinemachineCamera de la escena (obligatorio para el zoom).")]
     public CinemachineCamera cinemachineCamera;
@@ -154,11 +164,14 @@ public class IntroController : MonoBehaviour
         // Setup initial fade state
         if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
         if (decisionPanel != null) decisionPanel.SetActive(false);
-        if (backgroundMusicSource != null) 
+
+        // Iniciar música de intro (loop hasta que termine la intro)
+        if (introMusicSource != null && introMusicClip != null)
         {
-            backgroundMusicSource.loop = true;
-            backgroundMusicSource.volume = 0.2f; // "Sonido de fondo muy bajito"
-            backgroundMusicSource.Play();
+            introMusicSource.clip = introMusicClip;
+            introMusicSource.loop = true;
+            introMusicSource.volume = introMusicVolume;
+            introMusicSource.Play();
         }
 
         // Start sequence (Wait for one frame to ensure UI is ready)
@@ -170,8 +183,9 @@ public class IntroController : MonoBehaviour
         if (_decisionActive)
         {
             HandleInput();
-            // Continuously update visuals for smooth animation
-            UpdateSelectionVisuals();
+            // Re-check: HandleInput puede desactivar _decisionActive al confirmar
+            if (_decisionActive)
+                UpdateSelectionVisuals();
         }
     }
 
@@ -198,14 +212,14 @@ public class IntroController : MonoBehaviour
                    textContainer.anchoredPosition = _textContainerOriginalPos;
                 }
 
-                // Animate Entrance (Slide Up + Fade In)
-                yield return StartCoroutine(AnimateTextEntrance());
-
-                // Typewriter
+                // Typewriter + Entrance simultaneously
                 bool typingFinished = false;
                 typewriter.ShowText(line, () => typingFinished = true);
+
+                // Animate Entrance (Slide Up + Fade In) concurrent with typing
+                yield return StartCoroutine(AnimateTextEntrance());
                 
-                // Wait for typing
+                // Wait for typing to complete
                 while (!typingFinished) yield return null;
                 
                 // Wait for reading time
@@ -226,11 +240,21 @@ public class IntroController : MonoBehaviour
     private IEnumerator AnimateTextExit()
     {
         if (_textCanvasGroup == null) yield break;
+
+        Vector2 startPos = _textContainerOriginalPos;
+        Vector2 endPos = startPos + new Vector2(0, slideDistance);
+
         float timer = 0f;
         while (timer < fadeOutTime)
         {
             float progress = timer / fadeOutTime;
-            _textCanvasGroup.alpha = Mathf.Lerp(1f, 0f, progress);
+            float slideEval = slideCurve.Evaluate(progress);
+            float fadeEval = fadeCurve.Evaluate(progress);
+
+            _textCanvasGroup.alpha = Mathf.Lerp(1f, 0f, fadeEval);
+            if (textContainer != null)
+                textContainer.anchoredPosition = Vector2.Lerp(startPos, endPos, slideEval);
+
             timer += Time.unscaledDeltaTime;
             yield return null;
         }
@@ -274,13 +298,6 @@ public class IntroController : MonoBehaviour
             
         if (noOptionText != null && !string.IsNullOrEmpty(optionNoLabel)) 
             noOptionText.text = optionNoLabel;
-
-        // Setup looping sound for decision phase
-        if (backgroundMusicSource != null && decisionLoopClip != null)
-        {
-            backgroundMusicSource.clip = decisionLoopClip;
-            backgroundMusicSource.Play(); // Restart/Play loop
-        }
 
         UpdateSelectionVisuals();
     }
@@ -371,41 +388,115 @@ public class IntroController : MonoBehaviour
             TrustManager.Instance.ModifyLC(-9f);
         }
 
-        // Start Ending Sequence (Song + Blur + Zoom)
+        // Iniciar música de habitación (loop) - se combina con la intro que sigue sonando
+        if (roomMusicSource != null && roomMusicClip != null)
+        {
+            roomMusicSource.clip = roomMusicClip;
+            roomMusicSource.loop = true;
+            roomMusicSource.volume = roomMusicVolume;
+            roomMusicSource.Play();
+        }
+
+        // Animar slide-up de las opciones y luego iniciar ending
+        StartCoroutine(ConfirmAnimationThenEnding());
+    }
+
+    private IEnumerator ConfirmAnimationThenEnding()
+    {
+        // Pausa para que se vea el color amarillo antes de animar
+        yield return new WaitForSecondsRealtime(0.35f);
+
+        // Animar ambas opciones subiendo (como la animación de selección pero continua)
+        RectTransform yesRect = yesButton != null ? yesButton.GetComponent<RectTransform>() : null;
+        RectTransform noRect = noButton != null ? noButton.GetComponent<RectTransform>() : null;
+
+        Vector2 yesStart = yesRect != null ? yesRect.anchoredPosition : Vector2.zero;
+        Vector2 noStart = noRect != null ? noRect.anchoredPosition : Vector2.zero;
+        float confirmSlideDistance = optionMoveDistance * 2f;
+
+        float startAlphaYes = yesOptionText != null ? 1f : 0f;
+        float startAlphaNo = noOptionText != null ? 1f : 0f;
+
+        float timer = 0f;
+        float duration = 0.4f;
+        while (timer < duration)
+        {
+            float progress = timer / duration;
+            float ease = Mathf.SmoothStep(0f, 1f, progress);
+
+            if (yesRect != null)
+            {
+                yesRect.anchoredPosition = yesStart + new Vector2(0, confirmSlideDistance * ease);
+                if (yesOptionText != null)
+                {
+                    Color c = yesOptionText.color;
+                    c.a = Mathf.Lerp(startAlphaYes, 0f, ease);
+                    yesOptionText.color = c;
+                }
+            }
+            if (noRect != null)
+            {
+                noRect.anchoredPosition = noStart + new Vector2(0, confirmSlideDistance * ease);
+                if (noOptionText != null)
+                {
+                    Color c = noOptionText.color;
+                    c.a = Mathf.Lerp(startAlphaNo, 0f, ease);
+                    noOptionText.color = c;
+                }
+            }
+
+            timer += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // Start Ending Sequence (Blur + Zoom)
+        StartCoroutine(FadeOutIntroMusic(3f));
         StartCoroutine(EndingSequence());
+    }
+
+    private IEnumerator FadeOutIntroMusic(float duration)
+    {
+        if (introMusicSource == null || !introMusicSource.isPlaying) yield break;
+        float startVol = introMusicSource.volume;
+        float timer = 0f;
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime;
+            introMusicSource.volume = Mathf.Lerp(startVol, 0f, timer / duration);
+            yield return null;
+        }
+        introMusicSource.Stop();
+        introMusicSource.volume = startVol;
     }
 
     private IEnumerator EndingSequence()
     {
-        // 1. Reproducir canción de confirmación
-        if (backgroundMusicSource != null && endingSong != null)
-        {
-            backgroundMusicSource.Stop();
-            backgroundMusicSource.clip = endingSong;
-            backgroundMusicSource.loop = false;
-            backgroundMusicSource.Play();
-        }
+        // 0. Pausa breve para que el jugador vea el color amarillo de confirmación
+        yield return new WaitForSecondsRealtime(0.5f);
 
-        // 2. Ocultar UI de decisión
+        // 2. Ocultar toda la UI de intro
         if (decisionPanel != null) decisionPanel.SetActive(false);
         if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
 
-        // 3. Restaurar timeScale ANTES del zoom para que Cinemachine funcione
+        // 3. Pantalla negra sin texto (2-3 segundos)
+        yield return new WaitForSecondsRealtime(blackScreenDuration);
+
+        // 4. Restaurar timeScale para que Cinemachine funcione
         Time.timeScale = 1f;
 
-        // 4. Zoom con Cinemachine + Blur
+        // 5. Secuencia de cámara: empieza cercana y borrosa, luego vuelve a normal
         if (cinemachineCamera != null)
         {
-            float startSize = cinemachineCamera.Lens.OrthographicSize;
-            float timer = 0f;
+            float normalSize = cinemachineCamera.Lens.OrthographicSize;
+            // Poner cámara cerca ANTES de revelar la escena
+            cinemachineCamera.Lens.OrthographicSize = targetZoomSize;
 
-            // FASE 1: Overlay se desvanece → revela el mundo BORROSO + Zoom In
+            // FASE 1: Desvanecer overlay negro → revela mundo borroso y cercano
+            float timer = 0f;
             while (timer < zoomDuration)
             {
                 float progress = timer / zoomDuration;
                 float smoothProgress = Mathf.SmoothStep(0f, 1f, progress);
-
-                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(startSize, targetZoomSize, smoothProgress);
 
                 if (blackOverlayCanvasGroup != null)
                     blackOverlayCanvasGroup.alpha = Mathf.Lerp(1f, 0f, smoothProgress);
@@ -413,23 +504,20 @@ public class IntroController : MonoBehaviour
                 timer += Time.deltaTime;
                 yield return null;
             }
-            cinemachineCamera.Lens.OrthographicSize = targetZoomSize;
             if (blackOverlayCanvasGroup != null) blackOverlayCanvasGroup.alpha = 0f;
 
             // Mantener un momento (borroso y cerca)
             yield return new WaitForSeconds(1f);
 
-            // FASE 2: Blur se limpia + Zoom Out simultáneo
+            // FASE 2: Zoom out + blur se limpia simultáneamente → vuelve al estado normal
             timer = 0f;
             float totalDuration = Mathf.Max(zoomDuration, blurFadeDuration);
             while (timer < totalDuration)
             {
-                // Zoom out
                 float zoomProgress = Mathf.Clamp01(timer / zoomDuration);
                 float smoothZoom = Mathf.SmoothStep(0f, 1f, zoomProgress);
-                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(targetZoomSize, startSize, smoothZoom);
+                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(targetZoomSize, normalSize, smoothZoom);
 
-                // Blur fade out
                 float blurProgress = Mathf.Clamp01(timer / blurFadeDuration);
                 if (_dof != null)
                     _dof.gaussianMaxRadius.Override(Mathf.Lerp(maxBlurRadius, 0f, blurProgress));
@@ -437,7 +525,7 @@ public class IntroController : MonoBehaviour
                 timer += Time.deltaTime;
                 yield return null;
             }
-            cinemachineCamera.Lens.OrthographicSize = startSize;
+            cinemachineCamera.Lens.OrthographicSize = normalSize;
         }
         else
         {
@@ -456,7 +544,6 @@ public class IntroController : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
-            // Solo blur fade
             timer = 0f;
             while (timer < blurFadeDuration)
             {
@@ -468,11 +555,11 @@ public class IntroController : MonoBehaviour
             }
         }
 
-        // 5. Limpiar blur completamente
+        // 6. Limpiar blur completamente
         if (_dof != null) _dof.gaussianMaxRadius.Override(0f);
         if (_blurVolume != null) Destroy(_blurVolume.gameObject);
 
-        // 6. Desactivar overlay y controller
+        // 7. Desactivar overlay y controller
         if (blackOverlayCanvasGroup != null) blackOverlayCanvasGroup.gameObject.SetActive(false);
         this.enabled = false;
     }

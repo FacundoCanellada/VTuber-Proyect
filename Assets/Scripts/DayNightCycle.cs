@@ -18,8 +18,8 @@ namespace VTuberProject.Lighting
         [Range(10f, 3600f)]
         public float dayDurationInSeconds = 120f;
         
-        [Tooltip("El tiempo avanza automáticamente")]
-        public bool autoAdvanceTime = true;
+        [Tooltip("El tiempo avanza automáticamente (desactivar para control manual)")]
+        public bool autoAdvanceTime = false;
         
         [Tooltip("Velocidad del tiempo (1 = normal, 2 = doble velocidad)")]
         [Range(0f, 10f)]
@@ -90,7 +90,7 @@ namespace VTuberProject.Lighting
         public float windowLightMultiplier = 0.4f; // 60% de reducción
 
         [Header("Debug")]
-        public bool showDebugInfo = true;
+        public bool showDebugInfo = false;
 
         // Estado interno
         private TimeOfDay currentPeriod = TimeOfDay.Day;
@@ -289,22 +289,6 @@ namespace VTuberProject.Lighting
             }
         }
 
-        private void OnGUI()
-        {
-            if (!showDebugInfo) return;
 
-            // Mostrar info de debug en la esquina superior izquierda
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 16;
-            style.normal.textColor = Color.white;
-            style.padding = new RectOffset(10, 10, 10, 10);
-
-            string info = $"Time: {GetTimeString()}\n";
-            info += $"Period: {currentPeriod}\n";
-            info += $"Indoor Lights: {(indoorLightsOn ? "ON" : "OFF")}\n";
-            info += $"Global Light Intensity: {(globalLight != null ? globalLight.intensity.ToString("F2") : "N/A")}";
-
-            GUI.Label(new Rect(10, 10, 300, 100), info, style);
-        }
     }
 }

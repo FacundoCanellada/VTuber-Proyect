@@ -15,11 +15,14 @@ public class TypewriterEffect : MonoBehaviour
     [Tooltip("Los clips de voz que se usarán.")]
     public AudioClip[] voiceClips;
     [Tooltip("Volumen de la voz (0-1).")]
-    [Range(0f, 1f)] public float voiceVolume = 0.5f;
+    [Range(0f, 1f)] public float voiceVolume = 0.3f;
+    [Tooltip("Cada cuántos caracteres visibles se reproduce un sonido de voz.")]
+    [Range(1, 10)] public int charsPerSound = 3;
 
     private TMP_Text _tmpText;
     private Coroutine _typingCoroutine;
     private int _lastPlayedClipIndex = -1;
+    private int _visibleCharCount;
 
     public bool IsTyping { get; private set; }
 
@@ -38,8 +41,19 @@ public class TypewriterEffect : MonoBehaviour
     /// </summary>
     public void ShowText(string text, System.Action onComplete = null)
     {
+        ShowText(text, -1f, -1, onComplete);
+    }
+
+    /// <summary>
+    /// Starts the typing effect with per-line voice overrides.
+    /// Pass -1 for volumeOverride or charsPerSoundOverride to use the default values.
+    /// </summary>
+    public void ShowText(string text, float volumeOverride, int charsPerSoundOverride, System.Action onComplete = null)
+    {
         if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
-        _typingCoroutine = StartCoroutine(TypeRoutine(text, onComplete));
+        float vol = volumeOverride >= 0f ? volumeOverride : voiceVolume;
+        int cps = charsPerSoundOverride > 0 ? charsPerSoundOverride : charsPerSound;
+        _typingCoroutine = StartCoroutine(TypeRoutine(text, vol, cps, onComplete));
     }
 
     /// <summary>
@@ -50,10 +64,11 @@ public class TypewriterEffect : MonoBehaviour
         if (_tmpText != null) _tmpText.text = "";
     }
 
-    private IEnumerator TypeRoutine(string text, System.Action onComplete)
+    private IEnumerator TypeRoutine(string text, float effectiveVolume, int effectiveCharsPerSound, System.Action onComplete)
     {
         IsTyping = true;
-        _tmpText.text = ""; 
+        _tmpText.text = "";
+        _visibleCharCount = 0;
 
         // Handle Unity Inspector newlines just in case user types literal "\n"
         text = text.Replace("\\n", "\n");
@@ -79,10 +94,14 @@ public class TypewriterEffect : MonoBehaviour
             }
 
             _tmpText.text += text[i];
-            
+
             if (!char.IsWhiteSpace(text[i]))
             {
-                PlayVoiceSound();
+                _visibleCharCount++;
+                if (_visibleCharCount % effectiveCharsPerSound == 0)
+                {
+                    PlayVoiceSound(effectiveVolume);
+                }
             }
 
             i++;
@@ -93,23 +112,17 @@ public class TypewriterEffect : MonoBehaviour
         onComplete?.Invoke();
     }
 
-    private void PlayVoiceSound()
+    private void PlayVoiceSound(float volume)
     {
         if (audioSource == null || voiceClips == null || voiceClips.Length == 0) return;
 
-        // Play sound logic
-        // Only trigger a new clip if not currently playing (or handle overlap if desired)
         if (!audioSource.isPlaying)
         {
             int index = GetRandomClipIndex();
-            // Store previous clip index to ensure non-consecutive repeats
             _lastPlayedClipIndex = index;
             
             audioSource.clip = voiceClips[index];
-            // User requested slightly lower volume (adjustable later in settings)
-            // We use the inspector volume as base.
-            audioSource.volume = voiceVolume;
-            // Slight pitch variation for natural feel
+            audioSource.volume = volume;
             audioSource.pitch = Random.Range(0.95f, 1.05f); 
             audioSource.Play();
         }

@@ -6,6 +6,16 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
+[System.Serializable]
+public struct IntroLine
+{
+    [TextArea] public string text;
+    [Tooltip("Volumen de voz para esta línea (-1 = usar valor por defecto del TypewriterEffect).")]
+    [Range(-1f, 1f)] public float voiceVolume;
+    [Tooltip("Cada cuántos caracteres visibles se reproduce voz (-1 = usar valor por defecto).")]
+    public int charsPerSound;
+}
+
 public class IntroController : MonoBehaviour
 {
     [Header("UI References")]
@@ -33,26 +43,31 @@ public class IntroController : MonoBehaviour
     public AudioSource introMusicSource;
     [Tooltip("Clip de música que suena durante la intro (se reproduce una sola vez).")]
     public AudioClip introMusicClip;
-    [Range(0f, 1f)] public float introMusicVolume = 0.2f;
+    [Range(0f, 1f)] public float introMusicVolume = 0.12f;
 
     [Tooltip("AudioSource para la música de la habitación (loop, se activa al confirmar).")]
     public AudioSource roomMusicSource;
     [Tooltip("Clip de música ambiental de la habitación (loop, se combina con la intro).")]
     public AudioClip roomMusicClip;
-    [Range(0f, 1f)] public float roomMusicVolume = 0.3f;
+    [Range(0f, 1f)] public float roomMusicVolume = 0.15f;
 
     [Tooltip("AudioSource dedicado para efectos de sonido UI. Si no se asigna, se crea uno automáticamente.")]
     public AudioSource sfxAudioSource;
-    [Tooltip("Sonido al cambiar de opción (Navegación UI).")]
+    [Tooltip("Sonido al cambiar de opción (Navegación UI, uno solo).")]
     public AudioClip navigationSFX;
     [Range(0f, 1f)] public float navigationSFXVolume = 0.7f;
-    [Tooltip("Sonido al confirmar la selección (botón de aceptar).")]
+    [Tooltip("Primer sonido al confirmar la selección.")]
     public AudioClip confirmSFX;
     [Range(0f, 1f)] public float confirmSFXVolume = 0.8f;
+    [Tooltip("Segundo sonido al confirmar (suena después del primero).")]
+    public AudioClip confirmSFX2;
+    [Range(0f, 1f)] public float confirmSFX2Volume = 0.8f;
+    [Tooltip("Tiempo en segundos entre el primer y el segundo sonido de confirmación.")]
+    public float confirmSFXDelay = 0.1f;
 
     [Header("Dialogues Sequence")]
-    [Tooltip("Lista de textos que aparecerán uno tras otro.")]
-    [TextArea] public string[] introTexts; // Replaces single text
+    [Tooltip("Lista de líneas de intro con texto y ajustes de voz por línea.")]
+    public IntroLine[] introLines;
 
     // Obsolete but kept to avoid breaking serialized references if any (though logic will change)
     // [TextArea] public string introDialogueText = "¿Quieres ser mi amigo?"; 
@@ -61,13 +76,18 @@ public class IntroController : MonoBehaviour
     public string optionNoLabel = "Nel perro";    
 
     [Header("Settings")]
-    public float initialDelay = 1f;
-    public float textReadingTime = 3f; // Time to read each text
-    public float fadeOutTime = 1f;
+    public float initialDelay = 0.8f;
+    public float textReadingTime = 1.5f;
+    public float fadeOutTime = 0.6f;
 
     [Header("Animation Settings")]
-    public float optionMoveDistance = 20f; // Distance to move up when selected
-    public float optionMoveDuration = 0.2f; // Animation duration
+    [Tooltip("Cuánto sube la opción seleccionada al navegar.")]
+    public float optionMoveDistance = 40f;
+    public float optionMoveDuration = 0.2f;
+    [Tooltip("Distancia extra que sube la opción al confirmar (ponerse amarillo).")]
+    public float confirmBounceDistance = 25f;
+    [Tooltip("Duración de la animación de bounce al confirmar.")]
+    public float confirmBounceDuration = 0.18f;
     [Tooltip("Curva para la animación de Slide Up del texto.")]
     public AnimationCurve slideCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [Tooltip("Curva para el Fade In del texto.")]
@@ -75,7 +95,7 @@ public class IntroController : MonoBehaviour
     [Tooltip("Altura desde la que sube el texto en unidades de UI.")]
     public float slideDistance = 50f;
     [Tooltip("Duración de la animación de entrada del texto.")]
-    public float textEntranceDuration = 1.5f;
+    public float textEntranceDuration = 0.8f;
 
     [Header("Ending Sequence")]
     [Tooltip("Duración de la pantalla negra sin texto antes de revelar la escena.")]
@@ -83,8 +103,10 @@ public class IntroController : MonoBehaviour
     public float zoomDuration = 2f;
     [Tooltip("CinemachineCamera de la escena (obligatorio para el zoom).")]
     public CinemachineCamera cinemachineCamera;
-    [Tooltip("OrthographicSize al hacer zoom in (más chico = más cerca). El valor normal se lee automáticamente.")]
+    [Tooltip("OrthographicSize al hacer zoom in (más chico = más cerca).")]
     public float targetZoomSize = 1.5f;
+    [Tooltip("OrthographicSize final de la cámara tras el ending. Ajustar aquí para controlar qué tan cerca queda. (-1 = leer automáticamente de la cámara al iniciar).")]
+    public float finalCameraSize = -1f;
 
     [Header("Blur (Desenfoque)")]
     [Tooltip("Intensidad máxima del blur al inicio del ending (1.5 = fuerte).")]
@@ -195,11 +217,11 @@ public class IntroController : MonoBehaviour
         yield return new WaitForSecondsRealtime(initialDelay);
 
         // 2. Iterate through all texts
-        if (introTexts != null && typewriter != null)
+        if (introLines != null && typewriter != null)
         {
-            for (int i = 0; i < introTexts.Length; i++)
+            for (int i = 0; i < introLines.Length; i++)
             {
-                string line = introTexts[i];
+                IntroLine line = introLines[i];
 
                 // Stop any previous animations/fades
                 if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
@@ -214,7 +236,7 @@ public class IntroController : MonoBehaviour
 
                 // Typewriter + Entrance simultaneously
                 bool typingFinished = false;
-                typewriter.ShowText(line, () => typingFinished = true);
+                typewriter.ShowText(line.text, line.voiceVolume, line.charsPerSound, () => typingFinished = true);
 
                 // Animate Entrance (Slide Up + Fade In) concurrent with typing
                 yield return StartCoroutine(AnimateTextEntrance());
@@ -226,7 +248,7 @@ public class IntroController : MonoBehaviour
                 yield return new WaitForSecondsRealtime(textReadingTime);
 
                 // Fade Out ONLY if NOT the last text
-                if (i < introTexts.Length - 1)
+                if (i < introLines.Length - 1)
                 {
                     yield return StartCoroutine(AnimateTextExit());
                 }
@@ -321,16 +343,30 @@ public class IntroController : MonoBehaviour
 
         if (changed)
         {
-            // Reproducir sonido de navegación con AudioSource dedicado
             if (sfxAudioSource != null && navigationSFX != null)
-            {
                 sfxAudioSource.PlayOneShot(navigationSFX, navigationSFXVolume);
-            }
         }
     
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Z))
         {
             MakeDecision();
+        }
+    }
+
+    private IEnumerator PlayConfirmSounds()
+    {
+        if (sfxAudioSource != null && confirmSFX != null)
+            sfxAudioSource.PlayOneShot(confirmSFX, confirmSFXVolume);
+
+        if (confirmSFX2 != null)
+        {
+            yield return new WaitForSecondsRealtime(confirmSFXDelay);
+            if (sfxAudioSource != null)
+                sfxAudioSource.PlayOneShot(confirmSFX2, confirmSFX2Volume);
+        }
+        else
+        {
+            yield break;
         }
     }
 
@@ -373,11 +409,8 @@ public class IntroController : MonoBehaviour
         else if (!_selectedYes && noOptionText != null)
             noOptionText.color = confirmColor;
 
-        // Sonido de confirmación (botón)
-        if (sfxAudioSource != null && confirmSFX != null)
-        {
-            sfxAudioSource.PlayOneShot(confirmSFX, confirmSFXVolume);
-        }
+        // Dos sonidos de confirmación en secuencia
+        StartCoroutine(PlayConfirmSounds());
         
         if (_selectedYes)
         {
@@ -406,7 +439,27 @@ public class IntroController : MonoBehaviour
         // Pausa para que se vea el color amarillo antes de animar
         yield return new WaitForSecondsRealtime(0.35f);
 
-        // Animar ambas opciones subiendo (como la animación de selección pero continua)
+        // --- Bounce extra en la opción confirmada (amarillo) ---
+        RectTransform selectedRect = _selectedYes
+            ? (yesButton != null ? yesButton.GetComponent<RectTransform>() : null)
+            : (noButton != null ? noButton.GetComponent<RectTransform>() : null);
+
+        if (selectedRect != null && confirmBounceDistance > 0f)
+        {
+            Vector2 bounceStart = selectedRect.anchoredPosition;
+            Vector2 bounceTarget = bounceStart + new Vector2(0, confirmBounceDistance);
+            float bt = 0f;
+            while (bt < confirmBounceDuration)
+            {
+                float ease = Mathf.SmoothStep(0f, 1f, bt / confirmBounceDuration);
+                selectedRect.anchoredPosition = Vector2.Lerp(bounceStart, bounceTarget, ease);
+                bt += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            selectedRect.anchoredPosition = bounceTarget;
+        }
+
+        // Animar ambas opciones subiendo y desapareciendo
         RectTransform yesRect = yesButton != null ? yesButton.GetComponent<RectTransform>() : null;
         RectTransform noRect = noButton != null ? noButton.GetComponent<RectTransform>() : null;
 
@@ -487,7 +540,7 @@ public class IntroController : MonoBehaviour
         // 5. Secuencia de cámara: empieza cercana y borrosa, luego vuelve a normal
         if (cinemachineCamera != null)
         {
-            float normalSize = cinemachineCamera.Lens.OrthographicSize;
+            float normalSize = finalCameraSize > 0f ? finalCameraSize : cinemachineCamera.Lens.OrthographicSize;
             // Poner cámara cerca ANTES de revelar la escena
             cinemachineCamera.Lens.OrthographicSize = targetZoomSize;
 
@@ -509,18 +562,16 @@ public class IntroController : MonoBehaviour
             // Mantener un momento (borroso y cerca)
             yield return new WaitForSeconds(1f);
 
-            // FASE 2: Zoom out + blur se limpia simultáneamente → vuelve al estado normal
+            // FASE 2: Zoom out + blur se limpia simultáneamente a la MISMA velocidad
             timer = 0f;
-            float totalDuration = Mathf.Max(zoomDuration, blurFadeDuration);
-            while (timer < totalDuration)
+            while (timer < zoomDuration)
             {
-                float zoomProgress = Mathf.Clamp01(timer / zoomDuration);
-                float smoothZoom = Mathf.SmoothStep(0f, 1f, zoomProgress);
-                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(targetZoomSize, normalSize, smoothZoom);
+                float progress = Mathf.Clamp01(timer / zoomDuration);
+                float smooth = Mathf.SmoothStep(0f, 1f, progress);
+                cinemachineCamera.Lens.OrthographicSize = Mathf.Lerp(targetZoomSize, normalSize, smooth);
 
-                float blurProgress = Mathf.Clamp01(timer / blurFadeDuration);
                 if (_dof != null)
-                    _dof.gaussianMaxRadius.Override(Mathf.Lerp(maxBlurRadius, 0f, blurProgress));
+                    _dof.gaussianMaxRadius.Override(Mathf.Lerp(maxBlurRadius, 0f, smooth));
 
                 timer += Time.deltaTime;
                 yield return null;

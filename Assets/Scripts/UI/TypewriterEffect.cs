@@ -50,10 +50,20 @@ public class TypewriterEffect : MonoBehaviour
     /// </summary>
     public void ShowText(string text, float volumeOverride, int charsPerSoundOverride, System.Action onComplete = null)
     {
+        ShowText(text, volumeOverride, charsPerSoundOverride, -1f, onComplete);
+    }
+
+    /// <summary>
+    /// Starts the typing effect with per-line voice and speed overrides.
+    /// Pass -1 for any override to use the default values.
+    /// </summary>
+    public void ShowText(string text, float volumeOverride, int charsPerSoundOverride, float typingSpeedOverride, System.Action onComplete = null)
+    {
         if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
         float vol = volumeOverride >= 0f ? volumeOverride : voiceVolume;
         int cps = charsPerSoundOverride > 0 ? charsPerSoundOverride : charsPerSound;
-        _typingCoroutine = StartCoroutine(TypeRoutine(text, vol, cps, onComplete));
+        float speed = typingSpeedOverride > 0f ? typingSpeedOverride : typingSpeed;
+        _typingCoroutine = StartCoroutine(TypeRoutine(text, vol, cps, speed, onComplete));
     }
 
     /// <summary>
@@ -64,7 +74,7 @@ public class TypewriterEffect : MonoBehaviour
         if (_tmpText != null) _tmpText.text = "";
     }
 
-    private IEnumerator TypeRoutine(string text, float effectiveVolume, int effectiveCharsPerSound, System.Action onComplete)
+    private IEnumerator TypeRoutine(string text, float effectiveVolume, int effectiveCharsPerSound, float effectiveTypingSpeed, System.Action onComplete)
     {
         IsTyping = true;
         _tmpText.text = "";
@@ -75,7 +85,7 @@ public class TypewriterEffect : MonoBehaviour
 
         // Rich Text parser (simple version)
         int i = 0;
-        float wait = typingSpeed;
+        float wait = effectiveTypingSpeed;
 
         while (i < text.Length)
         {

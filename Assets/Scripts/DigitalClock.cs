@@ -20,6 +20,9 @@ namespace VTuberProject.Lighting
         public TextMeshProUGUI timeTextTMP;
         
         [Header("Display Settings")]
+        [Tooltip("Oculta este reloj en gameplay. Útil para dejar la info de horario solo durante desarrollo.")]
+        public bool hideClockInGameplay = true;
+
         [Tooltip("Formato de 12 horas (AM/PM) o 24 horas")]
         public bool use12HourFormat = false;
         
@@ -36,6 +39,12 @@ namespace VTuberProject.Lighting
 
         private void Start()
         {
+            if (hideClockInGameplay)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
             if (dayNightCycle == null)
             {
                 dayNightCycle = FindObjectOfType<DayNightCycle>();

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 /// <summary>
 /// Controlador de movimiento con WASD usando el NUEVO Input System
@@ -10,14 +11,19 @@ public class PlayerMovementNew : MonoBehaviour
     [Header("Configuración de Movimiento")]
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float runSpeed = 6f;
+    [SerializeField] private float wsJitterSpeedMultiplier = 0.5f;
     
     [Header("Referencias")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private AFKController afkController;
+    [SerializeField] private SpriteJitter spriteJitter;
     
     private PlayerAnimationController animationController;
     private Vector2 moveInput;
     private bool isRunning;
+    private int lastHorizontalInput;
+    private int lastVerticalInput = -1;
+    private bool forceVerticalJitter;
 
     private void Awake()
     {
@@ -25,6 +31,7 @@ public class PlayerMovementNew : MonoBehaviour
         
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (afkController == null) afkController = GetComponent<AFKController>(); // Intentar autodetectar
+        if (spriteJitter == null) spriteJitter = GetComponent<SpriteJitter>();
 
         // Configuración de seguridad para movimiento
         if (rb != null)
@@ -50,32 +57,122 @@ public class PlayerMovementNew : MonoBehaviour
         // Obtener input del teclado actual
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
+
+        bool upPressed = keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed;
+        bool downPressed = keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed;
+        bool leftPressed = keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed;
+        bool rightPressed = keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed;
+
+        bool upPressedThisFrame = keyboard.wKey.wasPressedThisFrame || keyboard.upArrowKey.wasPressedThisFrame;
+        bool downPressedThisFrame = keyboard.sKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame;
+        bool leftPressedThisFrame = keyboard.aKey.wasPressedThisFrame || keyboard.leftArrowKey.wasPressedThisFrame;
+        bool rightPressedThisFrame = keyboard.dKey.wasPressedThisFrame || keyboard.rightArrowKey.wasPressedThisFrame;
+        bool emotePressedThisFrame = keyboard.cKey.wasPressedThisFrame;
+        bool movementAttempted = upPressed || downPressed || leftPressed || rightPressed;
+        bool emoteCancelledThisFrame = false;
+
+        if (animationController != null && animationController.IsMovementLockedByEmote() && movementAttempted)
+        {
+            animationController.CancelEmote();
+            emoteCancelledThisFrame = true;
+        }
+
+        bool afkBlocksMovement = afkController != null && afkController.IsBlockingMovement();
+        if (emotePressedThisFrame && !emoteCancelledThisFrame && !afkBlocksMovement && animationController != null && !animationController.IsMovementLockedByEmote())
+        {
+            animationController.TryStartEmote();
+        }
+
+        if (animationController != null && animationController.IsMovementLockedByEmote())
+        {
+            moveInput = Vector2.zero;
+            forceVerticalJitter = false;
+            animationController.SetJitterDirectionLock(false);
+            isRunning = false;
+            return;
+        }
+
+        forceVerticalJitter = upPressed && downPressed;
         
-        moveInput = Vector2.zero;
-        
-        // WASD
-        if (keyboard.wKey.isPressed) moveInput.y += 1f;
-        if (keyboard.sKey.isPressed) moveInput.y -= 1f;
-        if (keyboard.aKey.isPressed) moveInput.x -= 1f;
-        if (keyboard.dKey.isPressed) moveInput.x += 1f;
+        float horizontalInput = ResolveAxis(rightPressed, leftPressed, rightPressedThisFrame, leftPressedThisFrame, ref lastHorizontalInput);
+        float verticalInput = forceVerticalJitter ? 0f : ResolveAxis(upPressed, downPressed, upPressedThisFrame, downPressedThisFrame, ref lastVerticalInput);
+        moveInput = new Vector2(horizontalInput, verticalInput);
+
+        if (animationController != null)
+        {
+            animationController.SetJitterDirectionLock(forceVerticalJitter);
+        }
         
         // Shift para correr
         isRunning = keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed;
     }
 
+    private float ResolveAxis(bool positivePressed, bool negativePressed, bool positivePressedThisFrame, bool negativePressedThisFrame, ref int lastAxisDirection)
+    {
+        if (positivePressedThisFrame)
+        {
+            lastAxisDirection = 1;
+        }
+
+        if (negativePressedThisFrame)
+        {
+            lastAxisDirection = -1;
+        }
+
+        if (positivePressed && negativePressed)
+        {
+            if (lastAxisDirection == 0)
+            {
+                lastAxisDirection = positivePressedThisFrame ? 1 : -1;
+            }
+
+            return lastAxisDirection;
+        }
+
+        if (positivePressed)
+        {
+            lastAxisDirection = 1;
+            return 1f;
+        }
+
+        if (negativePressed)
+        {
+            lastAxisDirection = -1;
+            return -1f;
+        }
+
+        return 0f;
+    }
+
     private void FixedUpdate()
     {
         if (rb == null) return;
+
+        if (animationController != null && animationController.IsMovementLockedByEmote())
+        {
+            rb.linearVelocity = Vector2.zero;
+            animationController.SetJitterDirectionLock(false);
+            animationController.UpdateAnimation(Vector2.zero);
+            return;
+        }
         
         // Bloqueo por AFK (Evita el "patinado")
         if (afkController != null && afkController.IsBlockingMovement())
         {
             rb.linearVelocity = Vector2.zero;
+            if (animationController != null)
+            {
+                animationController.SetJitterDirectionLock(false);
+            }
             return;
         }
 
         // Calcular velocidad
         float currentSpeed = isRunning ? runSpeed : walkSpeed;
+        if (forceVerticalJitter)
+        {
+            currentSpeed *= Mathf.Clamp(wsJitterSpeedMultiplier, 0.1f, 1f);
+        }
         Vector2 velocity = moveInput.normalized * currentSpeed;
         
         // Aplicar movimiento con velocity (compatible con todas las versiones)

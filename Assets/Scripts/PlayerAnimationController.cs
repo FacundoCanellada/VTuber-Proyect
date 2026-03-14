@@ -21,17 +21,35 @@ public class PlayerAnimationController : MonoBehaviour
     [Tooltip("Si es TRUE, el personaje cambiará de dirección instantáneamente sin suavizado (efecto glitchy/snappy).")]
     [SerializeField] private bool useRetroMovement = true;
 
+    [Tooltip("MoveY base cuando está activo el jitter forzado de W+S.")]
+    [SerializeField] private float jitterBaseYDirection = 1f;
+    [Tooltip("Intervalo del loop visual mientras W+S están mantenidas.")]
+    [SerializeField] private float forcedJitterFlickInterval = 0.03f;
+    [Tooltip("Nombre exacto del estado de emote dentro del Animator.")]
+    [SerializeField] private string emoteStateName = "Emote";
+
     // IDs de los parámetros del Animator (optimización)
     private int speedParamID;
     private int isRunningParamID;
     private int moveXParamID;
     private int moveYParamID;
     private int isAFKParamID;
+    private int isEmotingParamID;
     
     // Valores actuales para suavizado
     private float currentSpeed;
     private Vector2 currentDirection;
     private Vector2 smoothVelocity;
+    private bool directionLockedForJitter;
+    private bool forcedJitterActive;
+    private float forcedJitterTimer;
+    private float forcedJitterCurrentY = 1f;
+    private bool hasIsEmotingParameter;
+    private bool emoteActive;
+    private bool hasEnteredEmoteState;
+    private bool warnedMissingEmoteParameter;
+    private bool warnedMissingEmoteState;
+    private float emoteStartTimestamp;
 
     private void Awake()
     {
@@ -51,6 +69,35 @@ public class PlayerAnimationController : MonoBehaviour
         moveXParamID = Animator.StringToHash("MoveX");
         moveYParamID = Animator.StringToHash("MoveY");
         isAFKParamID = Animator.StringToHash("IsAFK");
+        isEmotingParamID = Animator.StringToHash("IsEmoting");
+        hasIsEmotingParameter = HasAnimatorParameter("IsEmoting", AnimatorControllerParameterType.Bool);
+        forcedJitterCurrentY = Mathf.Sign(Mathf.Approximately(jitterBaseYDirection, 0f) ? 1f : jitterBaseYDirection);
+    }
+
+    private void LateUpdate()
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        UpdateEmoteState();
+
+        if (!forcedJitterActive || emoteActive)
+        {
+            return;
+        }
+
+        forcedJitterTimer -= Time.deltaTime;
+        if (forcedJitterTimer > 0f)
+        {
+            return;
+        }
+
+        forcedJitterTimer = Mathf.Max(0.01f, forcedJitterFlickInterval);
+        forcedJitterCurrentY = forcedJitterCurrentY > 0f ? -1f : 1f;
+        animator.SetFloat(moveXParamID, 0f);
+        animator.SetFloat(moveYParamID, forcedJitterCurrentY);
     }
     
     /// <summary>
@@ -73,6 +120,11 @@ public class PlayerAnimationController : MonoBehaviour
         // Determinar si está corriendo
         bool isRunning = currentSpeed > runThreshold;
         animator.SetBool(isRunningParamID, isRunning);
+
+        if (directionLockedForJitter)
+        {
+            return;
+        }
         
         // Si hay movimiento, actualizar la dirección
         if (velocity.magnitude > 0.01f)
@@ -138,6 +190,81 @@ public class PlayerAnimationController : MonoBehaviour
         currentDirection = direction;
     }
 
+    public void SetJitterDirectionLock(bool isLocked)
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        bool wasLocked = directionLockedForJitter;
+        directionLockedForJitter = isLocked;
+        forcedJitterActive = isLocked;
+
+        // Solo inicializar al transicionar de false → true, no cada frame
+        if (isLocked && !wasLocked)
+        {
+            forcedJitterCurrentY = Mathf.Sign(Mathf.Approximately(jitterBaseYDirection, 0f) ? 1f : jitterBaseYDirection);
+            forcedJitterTimer = 0f;
+            currentDirection = new Vector2(0f, forcedJitterCurrentY);
+            animator.SetFloat(moveXParamID, 0f);
+            animator.SetFloat(moveYParamID, forcedJitterCurrentY);
+            return;
+        }
+
+        if (!isLocked)
+        {
+            forcedJitterTimer = 0f;
+        }
+    }
+
+    public bool TryStartEmote()
+    {
+        if (animator == null)
+        {
+            return false;
+        }
+
+        if (!hasIsEmotingParameter)
+        {
+            if (!warnedMissingEmoteParameter)
+            {
+                warnedMissingEmoteParameter = true;
+                Debug.LogWarning("[PlayerAnimationController] Falta el parámetro bool 'IsEmoting' en el Animator. Configúralo para habilitar el emote.");
+            }
+
+            return false;
+        }
+
+        SetJitterDirectionLock(false);
+        currentSpeed = 0f;
+        emoteActive = true;
+        hasEnteredEmoteState = false;
+        emoteStartTimestamp = Time.time;
+        animator.SetFloat(speedParamID, 0f);
+        animator.SetBool(isRunningParamID, false);
+        animator.SetBool(isEmotingParamID, true);
+        return true;
+    }
+
+    public void CancelEmote()
+    {
+        if (animator == null || !hasIsEmotingParameter || !emoteActive)
+        {
+            return;
+        }
+
+        emoteActive = false;
+        hasEnteredEmoteState = false;
+        emoteStartTimestamp = 0f;
+        animator.SetBool(isEmotingParamID, false);
+    }
+
+    public bool IsMovementLockedByEmote()
+    {
+        return emoteActive;
+    }
+
     /// <summary>
     /// Establece el estado de AFK (Away From Keyboard) en el Animator
     /// </summary>
@@ -165,7 +292,89 @@ public class PlayerAnimationController : MonoBehaviour
         
         animator.SetFloat(speedParamID, 0f);
         animator.SetBool(isRunningParamID, false);
+        if (hasIsEmotingParameter)
+        {
+            animator.SetBool(isEmotingParamID, false);
+        }
+
+        emoteActive = false;
+        hasEnteredEmoteState = false;
+        emoteStartTimestamp = 0f;
         currentSpeed = 0f;
+    }
+
+    private void UpdateEmoteState()
+    {
+        if (!emoteActive || !hasIsEmotingParameter)
+        {
+            return;
+        }
+
+        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
+        bool isTransitioning = animator.IsInTransition(0);
+        bool isCurrentEmote = IsEmoteState(currentState);
+        bool isNextEmote = isTransitioning && IsEmoteState(animator.GetNextAnimatorStateInfo(0));
+
+        if (isCurrentEmote || isNextEmote)
+        {
+            hasEnteredEmoteState = true;
+        }
+
+        if (!hasEnteredEmoteState && Time.time - emoteStartTimestamp > 0.25f)
+        {
+            emoteActive = false;
+            emoteStartTimestamp = 0f;
+            animator.SetBool(isEmotingParamID, false);
+
+            if (!warnedMissingEmoteState)
+            {
+                warnedMissingEmoteState = true;
+                Debug.LogWarning("[PlayerAnimationController] El parámetro 'IsEmoting' existe, pero no se encontró un estado/tag de emote activo. Crea el estado 'Emote' o asígnale el tag 'Emote'.");
+            }
+
+            return;
+        }
+
+        if (isCurrentEmote && !isTransitioning && currentState.normalizedTime >= 1f)
+        {
+            emoteActive = false;
+            hasEnteredEmoteState = false;
+            emoteStartTimestamp = 0f;
+            animator.SetBool(isEmotingParamID, false);
+            return;
+        }
+
+        if (hasEnteredEmoteState && !isCurrentEmote && !isNextEmote)
+        {
+            emoteActive = false;
+            hasEnteredEmoteState = false;
+            emoteStartTimestamp = 0f;
+        }
+    }
+
+    private bool IsEmoteState(AnimatorStateInfo stateInfo)
+    {
+        return stateInfo.IsTag("Emote") ||
+               stateInfo.IsName(emoteStateName) ||
+               stateInfo.IsName($"Base Layer.{emoteStateName}");
+    }
+
+    private bool HasAnimatorParameter(string parameterName, AnimatorControllerParameterType parameterType)
+    {
+        if (animator == null)
+        {
+            return false;
+        }
+
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            if (parameter.name == parameterName && parameter.type == parameterType)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 #if UNITY_EDITOR

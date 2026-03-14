@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 3c7eeaf012a33254e9a6ac516232dada
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7967428552850262886
+    second: Ahiiruw_Dancing-Sheet_0
+  - first:
+      213: -8369155071930942070
+    second: Ahiiruw_Dancing-Sheet_1
+  - first:
+      213: 3632514345548777560
+    second: Ahiiruw_Dancing-Sheet_2
+  - first:
+      213: 8013450678898928366
+    second: Ahiiruw_Dancing-Sheet_3
+  - first:
+      213: 2013164197401710761
+    second: Ahiiruw_Dancing-Sheet_4
+  - first:
+      213: -3382066016732015318
+    second: Ahiiruw_Dancing-Sheet_5
+  - first:
+      213: -2065498186480787056
+    second: Ahiiruw_Dancing-Sheet_6
+  - first:
+      213: 2655966603967853508
+    second: Ahiiruw_Dancing-Sheet_7
+  - first:
+      213: -7436035687888777818
+    second: Ahiiruw_Dancing-Sheet_8
+  - first:
+      213: 9209422575717639779
+    second: Ahiiruw_Dancing-Sheet_9
+  - first:
+      213: -5556671623855113887
+    second: Ahiiruw_Dancing-Sheet_10
+  - first:
+      213: 6849017983418249865
+    second: Ahiiruw_Dancing-Sheet_11
+  - first:
+      213: 2822448677532660228
+    second: Ahiiruw_Dancing-Sheet_12
+  - first:
+      213: -6519309625988627911
+    second: Ahiiruw_Dancing-Sheet_13
+  - first:
+      213: -3921491395093116976
+    second: Ahiiruw_Dancing-Sheet_14
+  - first:
+      213: 2875426693293883063
+    second: Ahiiruw_Dancing-Sheet_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 1
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66bc1f93e0ef19e60800000000000000
+      internalID: 7967428552850262886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 1
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8db563cdc9cadb80800000000000000
+      internalID: -8369155071930942070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1
+        width: 19
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85802f72d88496230800000000000000
+      internalID: 3632514345548777560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 1
+        width: 19
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eea22e47fee753f60800000000000000
+      internalID: 8013450678898928366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 1
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a0d9acdb2230fb10800000000000000
+      internalID: 2013164197401710761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 1
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2594c170ec7011d0800000000000000
+      internalID: -3382066016732015318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 1
+        width: 19
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0916996c750e553e0800000000000000
+      internalID: -2065498186480787056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 1
+        width: 19
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c3fdcced83ebd420800000000000000
+      internalID: 2655966603967853508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 1
+        width: 19
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ad034e80f4edc890800000000000000
+      internalID: -7436035687888777818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 1
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 366ec1cf9017ecf70800000000000000
+      internalID: 9209422575717639779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 1
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1697f9e399cb2e2b0800000000000000
+      internalID: -5556671623855113887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 1
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98238e971999c0f50800000000000000
+      internalID: 6849017983418249865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 1
+        width: 19
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 402fa154e1a5b2720800000000000000
+      internalID: 2822448677532660228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 1
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 932c92a9f62c685a0800000000000000
+      internalID: -6519309625988627911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 1
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d749b56a501499c0800000000000000
+      internalID: -3921491395093116976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Ahiiruw_Dancing-Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 1
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7be3577c75197e720800000000000000
+      internalID: 2875426693293883063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Ahiiruw_Dancing-Sheet_0: 7967428552850262886
+      Ahiiruw_Dancing-Sheet_1: -8369155071930942070
+      Ahiiruw_Dancing-Sheet_10: -5556671623855113887
+      Ahiiruw_Dancing-Sheet_11: 6849017983418249865
+      Ahiiruw_Dancing-Sheet_12: 2822448677532660228
+      Ahiiruw_Dancing-Sheet_13: -6519309625988627911
+      Ahiiruw_Dancing-Sheet_14: -3921491395093116976
+      Ahiiruw_Dancing-Sheet_15: 2875426693293883063
+      Ahiiruw_Dancing-Sheet_2: 3632514345548777560
+      Ahiiruw_Dancing-Sheet_3: 8013450678898928366
+      Ahiiruw_Dancing-Sheet_4: 2013164197401710761
+      Ahiiruw_Dancing-Sheet_5: -3382066016732015318
+      Ahiiruw_Dancing-Sheet_6: -2065498186480787056
+      Ahiiruw_Dancing-Sheet_7: 2655966603967853508
+      Ahiiruw_Dancing-Sheet_8: -7436035687888777818
+      Ahiiruw_Dancing-Sheet_9: 9209422575717639779
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

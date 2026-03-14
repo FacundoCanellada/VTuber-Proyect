@@ -25,6 +25,7 @@ public class SpriteJitter : MonoBehaviour
     private float _jitterTimer;
     private float _flickTimer;
     private bool _isJittering;
+    private bool _forceJitter;
 
     private int _moveYParamID;
 
@@ -36,6 +37,8 @@ public class SpriteJitter : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (_animator == null) return;
+
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
 
@@ -57,9 +60,8 @@ public class SpriteJitter : MonoBehaviour
             _lastWasUp = false;
         }
 
-        if (_isJittering)
+        if (_forceJitter || _isJittering)
         {
-            _jitterTimer -= Time.deltaTime;
             _flickTimer -= Time.deltaTime;
 
             if (_flickTimer <= 0f)
@@ -69,8 +71,28 @@ public class SpriteJitter : MonoBehaviour
                 _animator.SetFloat(_moveYParamID, currentY > 0 ? -1f : 1f);
             }
 
-            if (_jitterTimer <= 0f)
+            if (!_forceJitter)
+            {
+                _jitterTimer -= Time.deltaTime;
+            }
+
+            if (!_forceJitter && _jitterTimer <= 0f)
                 _isJittering = false;
+        }
+    }
+
+    public void SetForcedJitter(bool enabled)
+    {
+        if (_forceJitter == enabled)
+        {
+            return;
+        }
+
+        _forceJitter = enabled;
+        if (_forceJitter)
+        {
+            _isJittering = true;
+            _flickTimer = 0f;
         }
     }
 

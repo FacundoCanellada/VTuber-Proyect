@@ -24,6 +24,9 @@ namespace VTuberProject.Lighting
         [Header("UI Indicator (Simple)")]
         [Tooltip("Mostrar indicador de texto simple")]
         public bool showSimpleIndicator = true;
+
+        [Tooltip("Oculta la pista visual del botón para que el jugador descubra la interacción.")]
+        public bool hideInteractionIndicator = true;
         
         [Tooltip("Texto a mostrar")]
         public string indicatorText = "C";
@@ -233,7 +236,7 @@ namespace VTuberProject.Lighting
 
         private void OnGUI()
         {
-            if (!showSimpleIndicator || !playerInRange) return;
+            if (hideInteractionIndicator || !showSimpleIndicator || !playerInRange) return;
 
             // Convertir posición del interruptor a screen space
             Vector3 worldPos = transform.position + indicatorOffset;

@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -14,6 +15,16 @@ public struct IntroLine
     [Range(-1f, 1f)] public float voiceVolume;
     [Tooltip("Cada cuántos caracteres visibles se reproduce voz (-1 = usar valor por defecto).")]
     public int charsPerSound;
+    [Tooltip("Tiempo en segundos por carácter para esta línea (-1 = usar valor por defecto del TypewriterEffect).")]
+    public float typingSpeed;
+    [Tooltip("Cuánto permanece la línea visible tras terminar de escribirse (-1 = usar valor por defecto del IntroController).")]
+    public float displayDuration;
+}
+
+public enum DecisionPromptHideMode
+{
+    Instant,
+    FadeOut
 }
 
 public class IntroController : MonoBehaviour
@@ -63,7 +74,13 @@ public class IntroController : MonoBehaviour
     public AudioClip confirmSFX2;
     [Range(0f, 1f)] public float confirmSFX2Volume = 0.8f;
     [Tooltip("Tiempo en segundos entre el primer y el segundo sonido de confirmación.")]
-    public float confirmSFXDelay = 0.1f;
+    public float confirmSFXDelay = 0.035f;
+    [Tooltip("Cantidad máxima de veces que puede sonar la música de intro antes de detenerse.")]
+    [Range(1, 3)] public int introMusicPlayCount = 3;
+    [Tooltip("Crossfade entre una repetición y la siguiente para que el reinicio no se escuche cortado.")]
+    public float introMusicLoopCrossfadeDuration = 0.35f;
+    [Tooltip("Fade out automático al final de la última repetición de la música de intro.")]
+    public float introMusicEndFadeDuration = 0.75f;
 
     [Header("Dialogues Sequence")]
     [Tooltip("Lista de líneas de intro con texto y ajustes de voz por línea.")]
@@ -79,6 +96,10 @@ public class IntroController : MonoBehaviour
     public float initialDelay = 0.8f;
     public float textReadingTime = 1.5f;
     public float fadeOutTime = 0.6f;
+    [Tooltip("Fallback para líneas cortas como 'Oye' si no se les asigna typingSpeed manualmente.")]
+    public float shortPromptTypingSpeed = 0.05f;
+    [Tooltip("Texto corto que debe salir más rápido por defecto si no tiene override manual.")]
+    public string shortPromptText = "Oye";
 
     [Header("Animation Settings")]
     [Tooltip("Cuánto sube la opción seleccionada al navegar.")]
@@ -96,6 +117,10 @@ public class IntroController : MonoBehaviour
     public float slideDistance = 50f;
     [Tooltip("Duración de la animación de entrada del texto.")]
     public float textEntranceDuration = 0.8f;
+    [Tooltip("Cómo desaparece el texto principal al confirmar la decisión.")]
+    public DecisionPromptHideMode decisionPromptHideMode = DecisionPromptHideMode.Instant;
+    [Tooltip("Duración del fade del texto principal al confirmar, si se usa FadeOut.")]
+    public float decisionPromptFadeDuration = 0.12f;
 
     [Header("Ending Sequence")]
     [Tooltip("Duración de la pantalla negra sin texto antes de revelar la escena.")]
@@ -136,6 +161,16 @@ public class IntroController : MonoBehaviour
     // Blur
     private Volume _blurVolume;
     private DepthOfField _dof;
+    private Coroutine _introMusicRoutine;
+    private Coroutine _introMusicFadeRoutine;
+    private bool _introMusicStopRequested;
+    private bool _introMusicFadeStarted;
+    private AudioSource _introMusicSecondarySource;
+    private AudioSource _confirmPrimaryAudioSource;
+    private AudioSource _confirmSecondaryAudioSource;
+
+    private const float LegacyConfirmSFXDelay = 0.1f;
+    private const float UpgradedConfirmSFXDelay = 0.035f;
 
     private void Awake()
     {
@@ -163,9 +198,19 @@ public class IntroController : MonoBehaviour
             sfxAudioSource.loop = false;
         }
 
+        _introMusicSecondarySource = CreateChildAudioSource("_IntroMusicSecondary", introMusicSource);
+        _confirmPrimaryAudioSource = CreateChildAudioSource("_ConfirmPrimary", sfxAudioSource);
+        _confirmSecondaryAudioSource = CreateChildAudioSource("_ConfirmSecondary", sfxAudioSource);
+
         // Store original positions for UI Animation
         if (yesButton != null) _yesOriginalPos = yesButton.GetComponent<RectTransform>().anchoredPosition;
         if (noButton != null) _noOriginalPos = noButton.GetComponent<RectTransform>().anchoredPosition;
+
+        // Upgrade suave para escenas que siguen teniendo el delay original serializado.
+        if (Mathf.Approximately(confirmSFXDelay, LegacyConfirmSFXDelay))
+        {
+            confirmSFXDelay = UpgradedConfirmSFXDelay;
+        }
     }
 
     private void Start()
@@ -187,13 +232,14 @@ public class IntroController : MonoBehaviour
         if (_textCanvasGroup != null) _textCanvasGroup.alpha = 0f;
         if (decisionPanel != null) decisionPanel.SetActive(false);
 
-        // Iniciar música de intro (loop hasta que termine la intro)
+        // Iniciar música de intro con repeticiones limitadas y fade al final.
         if (introMusicSource != null && introMusicClip != null)
         {
             introMusicSource.clip = introMusicClip;
-            introMusicSource.loop = true;
+            introMusicSource.loop = false;
+            introMusicSource.playOnAwake = false;
             introMusicSource.volume = introMusicVolume;
-            introMusicSource.Play();
+            _introMusicRoutine = StartCoroutine(PlayIntroMusicSequence());
         }
 
         // Start sequence (Wait for one frame to ensure UI is ready)
@@ -236,7 +282,7 @@ public class IntroController : MonoBehaviour
 
                 // Typewriter + Entrance simultaneously
                 bool typingFinished = false;
-                typewriter.ShowText(line.text, line.voiceVolume, line.charsPerSound, () => typingFinished = true);
+                typewriter.ShowText(line.text, line.voiceVolume, line.charsPerSound, GetEffectiveTypingSpeed(line), () => typingFinished = true);
 
                 // Animate Entrance (Slide Up + Fade In) concurrent with typing
                 yield return StartCoroutine(AnimateTextEntrance());
@@ -245,7 +291,7 @@ public class IntroController : MonoBehaviour
                 while (!typingFinished) yield return null;
                 
                 // Wait for reading time
-                yield return new WaitForSecondsRealtime(textReadingTime);
+                yield return new WaitForSecondsRealtime(GetEffectiveDisplayDuration(line));
 
                 // Fade Out ONLY if NOT the last text
                 if (i < introLines.Length - 1)
@@ -257,6 +303,174 @@ public class IntroController : MonoBehaviour
 
         // 3. Show Decision (Keep last text visible)
         ShowDecision();
+    }
+
+    private float GetEffectiveTypingSpeed(IntroLine line)
+    {
+        if (line.typingSpeed > 0f)
+        {
+            return line.typingSpeed;
+        }
+
+        if (!string.IsNullOrWhiteSpace(shortPromptText) &&
+            string.Equals(line.text?.Trim(), shortPromptText.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            return shortPromptTypingSpeed;
+        }
+
+        return -1f;
+    }
+
+    private float GetEffectiveDisplayDuration(IntroLine line)
+    {
+        return line.displayDuration > 0f ? line.displayDuration : textReadingTime;
+    }
+
+    private IEnumerator PlayIntroMusicSequence()
+    {
+        if (introMusicSource == null || introMusicClip == null)
+        {
+            yield break;
+        }
+
+        int repetitions = Mathf.Max(1, introMusicPlayCount);
+        float loopCrossfade = Mathf.Clamp(introMusicLoopCrossfadeDuration, 0f, introMusicClip.length * 0.45f);
+        float endFadeDuration = Mathf.Clamp(introMusicEndFadeDuration, 0f, introMusicClip.length * 0.9f);
+        AudioSource currentSource = introMusicSource;
+        AudioSource nextSource = _introMusicSecondarySource != null ? _introMusicSecondarySource : introMusicSource;
+
+        PrepareIntroMusicSource(currentSource, introMusicVolume);
+        currentSource.Play();
+
+        for (int playIndex = 0; playIndex < repetitions && !_introMusicStopRequested; playIndex++)
+        {
+            bool isLastPlay = playIndex == repetitions - 1;
+
+            if (!isLastPlay)
+            {
+                float leadTime = Mathf.Max(0f, introMusicClip.length - loopCrossfade);
+                if (leadTime > 0f)
+                {
+                    yield return new WaitForSecondsRealtime(leadTime);
+                }
+
+                if (_introMusicStopRequested)
+                {
+                    yield break;
+                }
+
+                PrepareIntroMusicSource(nextSource, 0f);
+                nextSource.Play();
+
+                if (loopCrossfade > 0f)
+                {
+                    yield return StartCoroutine(CrossfadeAudioSources(currentSource, nextSource, loopCrossfade));
+                }
+                else
+                {
+                    currentSource.Stop();
+                    nextSource.volume = introMusicVolume;
+                }
+
+                currentSource.Stop();
+                currentSource.volume = introMusicVolume;
+
+                AudioSource temp = currentSource;
+                currentSource = nextSource;
+                nextSource = temp;
+                continue;
+            }
+
+            float fullVolumeDuration = Mathf.Max(0f, introMusicClip.length - endFadeDuration);
+            if (fullVolumeDuration > 0f)
+            {
+                yield return new WaitForSecondsRealtime(fullVolumeDuration);
+            }
+
+            if (_introMusicStopRequested || !currentSource.isPlaying)
+            {
+                yield break;
+            }
+
+            if (endFadeDuration > 0f)
+            {
+                yield return StartCoroutine(FadeAudioSource(currentSource, currentSource.volume, 0f, endFadeDuration, true));
+            }
+            else
+            {
+                currentSource.Stop();
+            }
+
+            currentSource.volume = introMusicVolume;
+        }
+    }
+
+    private void PrepareIntroMusicSource(AudioSource source, float startVolume)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        source.clip = introMusicClip;
+        source.loop = false;
+        source.playOnAwake = false;
+        source.volume = startVolume;
+        source.Stop();
+    }
+
+    private IEnumerator CrossfadeAudioSources(AudioSource fromSource, AudioSource toSource, float duration)
+    {
+        if (fromSource == null || toSource == null || duration <= 0f)
+        {
+            yield break;
+        }
+
+        float timer = 0f;
+        float fromStartVolume = fromSource.volume;
+        while (timer < duration && !_introMusicStopRequested)
+        {
+            timer += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(timer / duration);
+            fromSource.volume = Mathf.Lerp(fromStartVolume, 0f, progress);
+            toSource.volume = Mathf.Lerp(0f, introMusicVolume, progress);
+            yield return null;
+        }
+
+        fromSource.volume = 0f;
+        toSource.volume = introMusicVolume;
+    }
+
+    private IEnumerator FadeAudioSource(AudioSource source, float fromVolume, float toVolume, float duration, bool stopAtEnd)
+    {
+        if (source == null)
+        {
+            yield break;
+        }
+
+        if (duration <= 0f)
+        {
+            source.volume = toVolume;
+            if (stopAtEnd)
+            {
+                source.Stop();
+            }
+            yield break;
+        }
+
+        float timer = 0f;
+        while (timer < duration && source.isPlaying)
+        {
+            timer += Time.unscaledDeltaTime;
+            source.volume = Mathf.Lerp(fromVolume, toVolume, Mathf.Clamp01(timer / duration));
+            yield return null;
+        }
+
+        source.volume = toVolume;
+        if (stopAtEnd)
+        {
+            source.Stop();
+        }
     }
 
     private IEnumerator AnimateTextExit()
@@ -353,20 +567,25 @@ public class IntroController : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayConfirmSounds()
+    private void PlayConfirmSounds()
     {
-        if (sfxAudioSource != null && confirmSFX != null)
-            sfxAudioSource.PlayOneShot(confirmSFX, confirmSFXVolume);
+        double startTime = AudioSettings.dspTime + 0.02d;
+        float delay = Mathf.Max(0f, confirmSFXDelay);
 
-        if (confirmSFX2 != null)
+        if (_confirmPrimaryAudioSource != null && confirmSFX != null)
         {
-            yield return new WaitForSecondsRealtime(confirmSFXDelay);
-            if (sfxAudioSource != null)
-                sfxAudioSource.PlayOneShot(confirmSFX2, confirmSFX2Volume);
+            _confirmPrimaryAudioSource.Stop();
+            _confirmPrimaryAudioSource.clip = confirmSFX;
+            _confirmPrimaryAudioSource.volume = confirmSFXVolume;
+            _confirmPrimaryAudioSource.PlayScheduled(startTime);
         }
-        else
+
+        if (_confirmSecondaryAudioSource != null && confirmSFX2 != null)
         {
-            yield break;
+            _confirmSecondaryAudioSource.Stop();
+            _confirmSecondaryAudioSource.clip = confirmSFX2;
+            _confirmSecondaryAudioSource.volume = confirmSFX2Volume;
+            _confirmSecondaryAudioSource.PlayScheduled(startTime + delay);
         }
     }
 
@@ -410,7 +629,7 @@ public class IntroController : MonoBehaviour
             noOptionText.color = confirmColor;
 
         // Dos sonidos de confirmación en secuencia
-        StartCoroutine(PlayConfirmSounds());
+        PlayConfirmSounds();
         
         if (_selectedYes)
         {
@@ -469,6 +688,12 @@ public class IntroController : MonoBehaviour
 
         float startAlphaYes = yesOptionText != null ? 1f : 0f;
         float startAlphaNo = noOptionText != null ? 1f : 0f;
+        float promptStartAlpha = _textCanvasGroup != null ? _textCanvasGroup.alpha : 0f;
+
+        if (decisionPromptHideMode == DecisionPromptHideMode.Instant && _textCanvasGroup != null)
+        {
+            _textCanvasGroup.alpha = 0f;
+        }
 
         float timer = 0f;
         float duration = 0.4f;
@@ -498,28 +723,109 @@ public class IntroController : MonoBehaviour
                 }
             }
 
+            if (_textCanvasGroup != null && decisionPromptHideMode == DecisionPromptHideMode.FadeOut)
+            {
+                float promptProgress = decisionPromptFadeDuration > 0f
+                    ? Mathf.Clamp01(timer / decisionPromptFadeDuration)
+                    : 1f;
+                _textCanvasGroup.alpha = Mathf.Lerp(promptStartAlpha, 0f, promptProgress);
+            }
+
             timer += Time.unscaledDeltaTime;
             yield return null;
         }
 
         // Start Ending Sequence (Blur + Zoom)
-        StartCoroutine(FadeOutIntroMusic(3f));
+        BeginIntroMusicFadeOut(3f);
         StartCoroutine(EndingSequence());
+    }
+
+    private void BeginIntroMusicFadeOut(float duration)
+    {
+        if (_introMusicFadeStarted)
+        {
+            return;
+        }
+
+        _introMusicFadeStarted = true;
+        _introMusicStopRequested = true;
+
+        if (_introMusicRoutine != null)
+        {
+            StopCoroutine(_introMusicRoutine);
+            _introMusicRoutine = null;
+        }
+
+        if (_introMusicFadeRoutine != null)
+        {
+            StopCoroutine(_introMusicFadeRoutine);
+        }
+
+        _introMusicFadeRoutine = StartCoroutine(FadeOutIntroMusic(duration));
     }
 
     private IEnumerator FadeOutIntroMusic(float duration)
     {
-        if (introMusicSource == null || !introMusicSource.isPlaying) yield break;
-        float startVol = introMusicSource.volume;
+        AudioSource primary = introMusicSource;
+        AudioSource secondary = _introMusicSecondarySource;
+
+        bool primaryPlaying = primary != null && primary.isPlaying;
+        bool secondaryPlaying = secondary != null && secondary.isPlaying;
+        if (!primaryPlaying && !secondaryPlaying) yield break;
+
+        float primaryStartVol = primaryPlaying ? primary.volume : 0f;
+        float secondaryStartVol = secondaryPlaying ? secondary.volume : 0f;
         float timer = 0f;
         while (timer < duration)
         {
             timer += Time.unscaledDeltaTime;
-            introMusicSource.volume = Mathf.Lerp(startVol, 0f, timer / duration);
+            float progress = Mathf.Clamp01(timer / duration);
+            if (primaryPlaying)
+            {
+                primary.volume = Mathf.Lerp(primaryStartVol, 0f, progress);
+            }
+            if (secondaryPlaying)
+            {
+                secondary.volume = Mathf.Lerp(secondaryStartVol, 0f, progress);
+            }
             yield return null;
         }
-        introMusicSource.Stop();
-        introMusicSource.volume = startVol;
+
+        if (primary != null)
+        {
+            primary.Stop();
+            primary.volume = introMusicVolume;
+        }
+        if (secondary != null)
+        {
+            secondary.Stop();
+            secondary.volume = introMusicVolume;
+        }
+
+        _introMusicFadeRoutine = null;
+    }
+
+    private AudioSource CreateChildAudioSource(string childName, AudioSource templateSource)
+    {
+        GameObject audioObject = new GameObject(childName);
+        audioObject.transform.SetParent(transform, false);
+
+        AudioSource source = audioObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.loop = false;
+        source.volume = 1f;
+
+        if (templateSource != null)
+        {
+            source.outputAudioMixerGroup = templateSource.outputAudioMixerGroup;
+            source.spatialBlend = templateSource.spatialBlend;
+            source.priority = templateSource.priority;
+            source.pitch = templateSource.pitch;
+            source.panStereo = templateSource.panStereo;
+            source.reverbZoneMix = templateSource.reverbZoneMix;
+        }
+
+        return source;
     }
 
     private IEnumerator EndingSequence()

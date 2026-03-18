@@ -101,7 +101,7 @@ public class AFKController : MonoBehaviour
             if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) return true;
             if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) return true;
             if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) return true;
-            if (Keyboard.current.cKey.isPressed) return true;
+            if (Keyboard.current.eKey.isPressed) return true;
             
             // Opcional: También despertar con Espacio o Enter (Interacción)
             if (Keyboard.current.spaceKey.isPressed) return true;

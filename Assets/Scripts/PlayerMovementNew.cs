@@ -67,7 +67,7 @@ public class PlayerMovementNew : MonoBehaviour
         bool downPressedThisFrame = keyboard.sKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame;
         bool leftPressedThisFrame = keyboard.aKey.wasPressedThisFrame || keyboard.leftArrowKey.wasPressedThisFrame;
         bool rightPressedThisFrame = keyboard.dKey.wasPressedThisFrame || keyboard.rightArrowKey.wasPressedThisFrame;
-        bool emotePressedThisFrame = keyboard.cKey.wasPressedThisFrame;
+        bool emotePressedThisFrame = keyboard.eKey.wasPressedThisFrame;
         bool movementAttempted = upPressed || downPressed || leftPressed || rightPressed;
         bool emoteCancelledThisFrame = false;
 

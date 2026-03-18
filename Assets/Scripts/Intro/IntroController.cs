@@ -690,11 +690,6 @@ public class IntroController : MonoBehaviour
         float startAlphaNo = noOptionText != null ? 1f : 0f;
         float promptStartAlpha = _textCanvasGroup != null ? _textCanvasGroup.alpha : 0f;
 
-        if (decisionPromptHideMode == DecisionPromptHideMode.Instant && _textCanvasGroup != null)
-        {
-            _textCanvasGroup.alpha = 0f;
-        }
-
         float timer = 0f;
         float duration = 0.4f;
         while (timer < duration)
@@ -723,16 +718,18 @@ public class IntroController : MonoBehaviour
                 }
             }
 
-            if (_textCanvasGroup != null && decisionPromptHideMode == DecisionPromptHideMode.FadeOut)
+            if (_textCanvasGroup != null)
             {
-                float promptProgress = decisionPromptFadeDuration > 0f
-                    ? Mathf.Clamp01(timer / decisionPromptFadeDuration)
-                    : 1f;
-                _textCanvasGroup.alpha = Mathf.Lerp(promptStartAlpha, 0f, promptProgress);
+                _textCanvasGroup.alpha = Mathf.Lerp(promptStartAlpha, 0f, ease);
             }
 
             timer += Time.unscaledDeltaTime;
             yield return null;
+        }
+
+        if (_textCanvasGroup != null)
+        {
+            _textCanvasGroup.alpha = 0f;
         }
 
         // Start Ending Sequence (Blur + Zoom)

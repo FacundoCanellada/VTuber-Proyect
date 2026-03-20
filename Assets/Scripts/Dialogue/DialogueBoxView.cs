@@ -15,20 +15,18 @@ public class DialogueBoxView : MonoBehaviour
     [SerializeField] private RectTransform dialogueBoxRect;
     [Tooltip("CanvasGroup del cuadro. Se usa para la animación de alpha.")]
     [SerializeField] private CanvasGroup dialogueBoxCanvasGroup;
-    [Tooltip("Curva de animación de apertura. Recomendado: ease-out (sube rápido al principio y frena al final).")]
-    [SerializeField] private AnimationCurve openCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     [Tooltip("Duración de la animación de apertura en segundos.")]
-    [SerializeField] private float openDuration = 0.35f;
-    [Tooltip("Duración de la animación de cierre (relativa a openDuration).")]
+    [SerializeField] private float openDuration = 0.5f;
+    [Tooltip("Duración de la animación de cierre relativa a openDuration.")]
     [SerializeField] private float closeDurationMultiplier = 0.65f;
+
+    [Header("Easing")]
 
     [Header("Portrait")]
     [Tooltip("Imagen donde se renderiza el retrato del personaje.")]
     [SerializeField] private Image portraitImage;
-    [Tooltip("Contenedor del portrait (puede tener frame, fondo, etc.). Se activa con delay.")]
+    [Tooltip("Contenedor del portrait (puede tener frame, fondo, etc.).")]
     [SerializeField] private GameObject portraitContainer;
-    [Tooltip("Segundos desde el inicio de la animación de apertura hasta que aparece el portrait.")]
-    [SerializeField] private float portraitDelay = 0.18f;
 
     [Header("Texto")]
     [Tooltip("TMP_Text donde se muestra el nombre del personaje.")]
@@ -59,15 +57,31 @@ public class DialogueBoxView : MonoBehaviour
     private string _currentLineFullText;
     private AudioClip[] _originalVoiceClips;
     private System.Action _onComplete;
+    private Vector2 _originalBoxSize;
+    private bool _hasCachedOriginalBoxSize;
 
     private void Awake()
     {
+        CacheOriginalBoxSize();
         // Estado inicial garantizado: invisible y escala aplastada
         ResetVisualState();
     }
 
+    private void CacheOriginalBoxSize()
+    {
+        if (dialogueBoxRect == null || _hasCachedOriginalBoxSize)
+        {
+            return;
+        }
+
+        _originalBoxSize = dialogueBoxRect.sizeDelta;
+        _hasCachedOriginalBoxSize = true;
+    }
+
     private void ResetVisualState()
     {
+        CacheOriginalBoxSize();
+
         if (dialogueBoxCanvasGroup != null)
         {
             dialogueBoxCanvasGroup.alpha = 0f;
@@ -77,8 +91,8 @@ public class DialogueBoxView : MonoBehaviour
 
         if (dialogueBoxRect != null)
         {
-            Vector3 s = dialogueBoxRect.localScale;
-            dialogueBoxRect.localScale = new Vector3(0.01f, s.y, s.z);
+            dialogueBoxRect.localScale = Vector3.one;
+            dialogueBoxRect.sizeDelta = new Vector2(0f, _originalBoxSize.y);
         }
 
         if (portraitContainer != null)
@@ -92,6 +106,7 @@ public class DialogueBoxView : MonoBehaviour
     {
         // Detener cualquier coroutine anterior (por si se interrumpe)
         StopAllCoroutines();
+        CacheOriginalBoxSize();
         ResetVisualState();
 
         _lines = data.lines;
@@ -137,32 +152,23 @@ public class DialogueBoxView : MonoBehaviour
             portraitContainer.SetActive(false);
 
         float elapsed = 0f;
-        bool portraitShown = false;
 
         while (elapsed < openDuration)
         {
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / openDuration);
-            float curveValue = openCurve.Evaluate(t);
 
-            // Escala X: de 0.01 a 1.0
+            // La apertura usa la misma lógica del cierre pero invertida:
+            // ancho 0 -> ancho original y alpha 0 -> 1 con EaseOutQuad.
+            float ease = EaseOutQuad(t);
+
             if (dialogueBoxRect != null)
             {
-                Vector3 s = dialogueBoxRect.localScale;
-                dialogueBoxRect.localScale = new Vector3(Mathf.Lerp(0.01f, 1f, curveValue), s.y, s.z);
+                dialogueBoxRect.sizeDelta = new Vector2(Mathf.Lerp(0f, _originalBoxSize.x, ease), _originalBoxSize.y);
             }
 
-            // Alpha: de 0 a 1
             if (dialogueBoxCanvasGroup != null)
-                dialogueBoxCanvasGroup.alpha = curveValue;
-
-            // Portrait aparece con delay
-            if (!portraitShown && elapsed >= portraitDelay)
-            {
-                portraitShown = true;
-                if (portraitContainer != null)
-                    portraitContainer.SetActive(true);
-            }
+                dialogueBoxCanvasGroup.alpha = ease;
 
             yield return null;
         }
@@ -170,8 +176,8 @@ public class DialogueBoxView : MonoBehaviour
         // Garantizar estado final
         if (dialogueBoxRect != null)
         {
-            Vector3 s = dialogueBoxRect.localScale;
-            dialogueBoxRect.localScale = new Vector3(1f, s.y, s.z);
+            dialogueBoxRect.localScale = Vector3.one;
+            dialogueBoxRect.sizeDelta = _originalBoxSize;
         }
 
         if (dialogueBoxCanvasGroup != null)
@@ -349,6 +355,9 @@ public class DialogueBoxView : MonoBehaviour
         _isAnimatingClose = true;
         _waitingForAdvance = false;
 
+        if (portraitContainer != null)
+            portraitContainer.SetActive(false);
+
         if (dialogueBoxCanvasGroup != null)
         {
             dialogueBoxCanvasGroup.blocksRaycasts = false;
@@ -358,22 +367,19 @@ public class DialogueBoxView : MonoBehaviour
         float closeDuration = openDuration * closeDurationMultiplier;
         float elapsed = 0f;
 
-        float startScaleX = dialogueBoxRect != null ? dialogueBoxRect.localScale.x : 1f;
-
         while (elapsed < closeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / closeDuration);
-            float curveValue = openCurve.Evaluate(t);
+
+            // EaseInQuad: empieza suave y acelera hacia el cierre. Decisivo y limpio.
+            float ease = EaseInQuad(t);
 
             if (dialogueBoxRect != null)
-            {
-                Vector3 s = dialogueBoxRect.localScale;
-                dialogueBoxRect.localScale = new Vector3(Mathf.Lerp(startScaleX, 0.01f, curveValue), s.y, s.z);
-            }
+                dialogueBoxRect.sizeDelta = new Vector2(Mathf.Lerp(_originalBoxSize.x, 0f, ease), _originalBoxSize.y);
 
             if (dialogueBoxCanvasGroup != null)
-                dialogueBoxCanvasGroup.alpha = Mathf.Lerp(1f, 0f, curveValue);
+                dialogueBoxCanvasGroup.alpha = Mathf.Lerp(1f, 0f, ease);
 
             yield return null;
         }
@@ -397,4 +403,18 @@ public class DialogueBoxView : MonoBehaviour
         // Notificar al DialogueManager que terminó
         _onComplete?.Invoke();
     }
+
+    // ─────────────────────────────────────────────────────────
+    // EASING MATEMÁTICO
+    // ─────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Ease Out Quad: desaceleración suave, sin overshoot. Ideal para alpha.
+    /// </summary>
+    private static float EaseOutQuad(float t) => 1f - (1f - t) * (1f - t);
+
+    /// <summary>
+    /// Ease In Quad: aceleración suave desde 0. Cierre decisivo y limpio.
+    /// </summary>
+    private static float EaseInQuad(float t) => t * t;
 }

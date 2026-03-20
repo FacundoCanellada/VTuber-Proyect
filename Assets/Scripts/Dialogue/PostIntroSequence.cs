@@ -71,6 +71,7 @@ public class PostIntroSequence : MonoBehaviour
 
         // 3. Detener y fijar la dirección sur (idle de frente a la cámara)
         characterRb.linearVelocity = Vector2.zero;
+        animationController.ResetAnimation();
         animationController.UpdateAnimation(Vector2.zero);
         animationController.SetDirection(Vector2.down);
 

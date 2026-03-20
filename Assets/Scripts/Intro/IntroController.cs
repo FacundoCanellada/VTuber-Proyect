@@ -128,6 +128,8 @@ public class IntroController : MonoBehaviour
     public float zoomDuration = 2f;
     [Tooltip("CinemachineCamera de la escena (obligatorio para el zoom).")]
     public CinemachineCamera cinemachineCamera;
+    [Tooltip("Referencia al PostIntroSequence de la escena. Se usa para bloquear el input del jugador antes del efecto de cámara.")]
+    [SerializeField] private PostIntroSequence postIntroSequence;
     [Tooltip("OrthographicSize al hacer zoom in (más chico = más cerca).")]
     public float targetZoomSize = 1.5f;
     [Tooltip("OrthographicSize final de la cámara tras el ending. Ajustar aquí para controlar qué tan cerca queda. (-1 = leer automáticamente de la cámara al iniciar).")]
@@ -837,7 +839,17 @@ public class IntroController : MonoBehaviour
         // 3. Pantalla negra sin texto (2-3 segundos)
         yield return new WaitForSecondsRealtime(blackScreenDuration);
 
-        // 4. Restaurar timeScale para que Cinemachine funcione
+        // 4. Restaurar timeScale para que Cinemachine funcione.
+        //    Bloquear el input del jugador ANTES de restaurar el timeScale para que no
+        //    pueda moverse durante el efecto de cámara. PostIntroSequence lo libera al final.
+        if (postIntroSequence != null)
+            postIntroSequence.BlockInputImmediate();
+        else
+        {
+            // Fallback: buscar en escena si no se asignó en Inspector
+            postIntroSequence = FindFirstObjectByType<PostIntroSequence>();
+            if (postIntroSequence != null) postIntroSequence.BlockInputImmediate();
+        }
         Time.timeScale = 1f;
 
         // 5. Secuencia de cámara: empieza cercana y borrosa, luego vuelve a normal
@@ -915,6 +927,13 @@ public class IntroController : MonoBehaviour
 
         // 7. Desactivar overlay y controller
         if (blackOverlayCanvasGroup != null) blackOverlayCanvasGroup.gameObject.SetActive(false);
+
+        // 8. Iniciar secuencia post-intro: personaje camina al sur y empieza el primer diálogo
+        if (postIntroSequence != null)
+            postIntroSequence.Begin();
+        else
+            Debug.LogWarning("[IntroController] No se asignó PostIntroSequence en el Inspector.");
+
         this.enabled = false;
     }
 

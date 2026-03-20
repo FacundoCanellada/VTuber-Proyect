@@ -25,6 +25,12 @@ public class PlayerMovementNew : MonoBehaviour
     private int lastVerticalInput = -1;
     private bool forceVerticalJitter;
 
+    /// <summary>
+    /// Bloquea el input del jugador sin anular la física.
+    /// Usado por PostIntroSequence para controlar el personaje en cinemáticas.
+    /// </summary>
+    public bool IsInputBlocked { get; set; }
+
     private void Awake()
     {
         animationController = GetComponent<PlayerAnimationController>();
@@ -57,6 +63,20 @@ public class PlayerMovementNew : MonoBehaviour
         // Obtener input del teclado actual
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
+
+        // Bloquear input durante cinemáticas (IsInputBlocked) o mientras hay un diálogo activo
+        bool dialogueBlocks = DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive;
+        if (IsInputBlocked || dialogueBlocks)
+        {
+            moveInput = Vector2.zero;
+            forceVerticalJitter = false;
+            if (animationController != null) animationController.SetJitterDirectionLock(false);
+            if (spriteJitter != null) spriteJitter.IsBlocked = true;
+            isRunning = false;
+            return;
+        }
+
+        if (spriteJitter != null) spriteJitter.IsBlocked = false;
 
         bool upPressed = keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed;
         bool downPressed = keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed;
@@ -155,7 +175,29 @@ public class PlayerMovementNew : MonoBehaviour
             animationController.UpdateAnimation(Vector2.zero);
             return;
         }
-        
+
+        // Modo cinemático / diálogo activo
+        if (IsInputBlocked)
+        {
+            // Si hay un diálogo activo, zerear la velocidad para que el personaje quede quieto.
+            // Si NO hay diálogo, PostIntroSequence está controlando la física directamente — no interferir.
+            bool dialogueActiveNow = DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive;
+            if (dialogueActiveNow)
+            {
+                rb.linearVelocity = Vector2.zero;
+                if (animationController != null) animationController.UpdateAnimation(Vector2.zero);
+            }
+            return;
+        }
+
+        // Diálogo activo sin cinemática (diálogo iniciado externamente sin IsInputBlocked)
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            rb.linearVelocity = Vector2.zero;
+            if (animationController != null) animationController.UpdateAnimation(Vector2.zero);
+            return;
+        }
+
         // Bloqueo por AFK (Evita el "patinado")
         if (afkController != null && afkController.IsBlockingMovement())
         {

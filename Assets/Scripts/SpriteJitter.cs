@@ -27,6 +27,12 @@ public class SpriteJitter : MonoBehaviour
     private bool _isJittering;
     private bool _forceJitter;
 
+    /// <summary>
+    /// Cuando es true, el jitter se detiene y no se puede activar.
+    /// Seteado por PlayerMovementNew cuando el input está bloqueado.
+    /// </summary>
+    public bool IsBlocked { get; set; }
+
     private int _moveYParamID;
 
     private void Awake()
@@ -41,6 +47,14 @@ public class SpriteJitter : MonoBehaviour
 
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
+
+        // No procesar jitter si el input está bloqueado (cinemática o diálogo)
+        if (IsBlocked)
+        {
+            _isJittering = false;
+            _forceJitter = false;
+            return;
+        }
 
         if (keyboard.wKey.wasPressedThisFrame || keyboard.upArrowKey.wasPressedThisFrame)
         {

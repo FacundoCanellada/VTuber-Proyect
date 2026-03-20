@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0be66d739e13f34e8122bdbdf8aa0a8, type: 3}
+  m_Name: IntroDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  characterName: Ahiiruw
+  portrait: {fileID: -2579209497633913200, guid: 1adbbda2980800a47b240022ccd1b4dd, type: 3}
+  characterVoiceClips: []
+  lines:
+  - text: "\xBFQu\xE9 onda? Soy Ahiiruw"
+    voiceClip: {fileID: 0}
+    typingSpeed: 0
+    charsPerSound: 0
+    lcModifier: 0
+    autoAdvance: 1
+    pauseAfter: 0

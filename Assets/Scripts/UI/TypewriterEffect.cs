@@ -160,4 +160,16 @@ public class TypewriterEffect : MonoBehaviour
         IsTyping = false;
         if (audioSource != null) audioSource.Stop();
     }
+
+    /// <summary>
+    /// Detiene el typewriter y muestra el texto completo de golpe.
+    /// Usado por DialogueBoxView cuando el jugador presiona Z para completar la línea.
+    /// </summary>
+    public void CompleteImmediate(string fullText)
+    {
+        if (_typingCoroutine != null) StopCoroutine(_typingCoroutine);
+        IsTyping = false;
+        if (audioSource != null) audioSource.Stop();
+        if (_tmpText != null) _tmpText.text = fullText;
+    }
 }

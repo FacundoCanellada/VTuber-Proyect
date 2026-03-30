@@ -14,6 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueData
   characterName: Ahiiruw
   portrait: {fileID: -2579209497633913200, guid: 1adbbda2980800a47b240022ccd1b4dd, type: 3}
+  defaultPortraitSequenceAsset: {fileID: 0}
+  defaultPortraitSequence:
+    idleSprite: {fileID: -7139880986659442855, guid: 7b07072fa9efeff4dae16b58bbdd36be, type: 3}
+    typingFrames:
+    - sprite: {fileID: -7139880986659442855, guid: 7b07072fa9efeff4dae16b58bbdd36be, type: 3}
+      repeatCount: 1
+      duration: 0.5
+    - sprite: {fileID: 1662473191939559500, guid: 83775537be195cb4fb9040d3d0267b50, type: 3}
+      repeatCount: 1
+      duration: 0.5
+    postTypingFrames:
+    - sprite: {fileID: 2887919521457852308, guid: a52363c06daf37848bead0a838eead04, type: 3}
+      repeatCount: 2
+      duration: 0.25
+    - sprite: {fileID: -7139880986659442855, guid: 7b07072fa9efeff4dae16b58bbdd36be, type: 3}
+      repeatCount: 2
+      duration: 0.25
   characterVoiceClips: []
   lines:
   - text: "\xBFQu\xE9 onda? Soy Ahiiruw"
@@ -23,3 +40,38 @@ MonoBehaviour:
     lcModifier: 0
     autoAdvance: 1
     pauseAfter: 0
+    usePortraitSequenceOverride: 0
+    portraitSequenceAsset: {fileID: 0}
+    portraitSequenceOverride:
+      idleSprite: {fileID: 0}
+      typingFrames: []
+      postTypingFrames: []
+    skipFinalCloseDelay: 0
+  - text: "...s\xED, ya se, el nombre est\xE1 raro."
+    voiceClip: {fileID: 0}
+    typingSpeed: 0
+    charsPerSound: 0
+    lcModifier: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    usePortraitSequenceOverride: 0
+    portraitSequenceAsset: {fileID: 11400000, guid: 348c00e4da589dd4381b57291229e12d, type: 2}
+    portraitSequenceOverride:
+      idleSprite: {fileID: 0}
+      typingFrames: []
+      postTypingFrames: []
+    skipFinalCloseDelay: 0
+  - text: "La \"h\" es muda. Por cierto.. \xBFSabias que mi...? "
+    voiceClip: {fileID: 0}
+    typingSpeed: 0
+    charsPerSound: 0
+    lcModifier: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    usePortraitSequenceOverride: 0
+    portraitSequenceAsset: {fileID: 11400000, guid: 0e5e3a0008832f4478780835d63b262b, type: 2}
+    portraitSequenceOverride:
+      idleSprite: {fileID: 0}
+      typingFrames: []
+      postTypingFrames: []
+    skipFinalCloseDelay: 0

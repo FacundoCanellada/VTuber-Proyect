@@ -13,6 +13,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject dialogueCanvas;
     [Tooltip("El componente que maneja la animación del box y el typewriter.")]
     [SerializeField] private DialogueBoxView dialogueBoxView;
+    [Tooltip("Vista de conversación telefónica/flotante. Opcional.")]
+    [SerializeField] private PhoneConversationView phoneConversationView;
 
     /// <summary>
     /// True mientras hay un diálogo activo. PlayerMovementNew lo consulta para bloquear input y física.
@@ -70,6 +72,29 @@ public class DialogueManager : MonoBehaviour
             dialogueCanvas.SetActive(true);
 
         dialogueBoxView.StartDialogue(data, HandleDialogueComplete);
+    }
+
+    public void StartPhoneConversation(PhoneConversationData data, System.Action onComplete = null)
+    {
+        if (data == null || data.lines == null || data.lines.Length == 0)
+        {
+            Debug.LogWarning("[DialogueManager] El PhoneConversationData es null o no tiene líneas.");
+            return;
+        }
+
+        if (phoneConversationView == null)
+        {
+            Debug.LogError("[DialogueManager] No se asignó el PhoneConversationView en el Inspector.");
+            return;
+        }
+
+        IsDialogueActive = true;
+        _onDialogueComplete = onComplete;
+
+        if (dialogueCanvas != null)
+            dialogueCanvas.SetActive(false);
+
+        phoneConversationView.StartConversation(data, HandleDialogueComplete);
     }
 
     private void HandleDialogueComplete()

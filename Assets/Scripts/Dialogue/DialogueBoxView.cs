@@ -59,6 +59,12 @@ public class DialogueBoxView : MonoBehaviour
     private System.Action _onComplete;
     private Vector2 _originalBoxSize;
     private bool _hasCachedOriginalBoxSize;
+    private DialoguePortraitSequence _defaultPortraitSequence;
+    private DialogueLine _currentLineData;
+    private DialoguePortraitSequence _currentPortraitSequence;
+    private bool _lineCompletionHandled;
+    private bool _skipFinalCloseDelayForPendingAdvance;
+    private Coroutine _portraitRoutine;
 
     private void Awake()
     {
@@ -115,6 +121,9 @@ public class DialogueBoxView : MonoBehaviour
         _waitingForAdvance = false;
         _isAnimatingOpen = false;
         _isAnimatingClose = false;
+        _lineCompletionHandled = false;
+        _skipFinalCloseDelayForPendingAdvance = false;
+        _defaultPortraitSequence = ResolvePortraitSequence(data.defaultPortraitSequenceAsset, data.defaultPortraitSequence);
 
         // Nombre del personaje
         if (characterNameText != null)
@@ -123,7 +132,7 @@ public class DialogueBoxView : MonoBehaviour
         // Portrait
         if (portraitImage != null)
         {
-            portraitImage.sprite = data.portrait;
+            portraitImage.sprite = GetIdlePortraitSprite(_defaultPortraitSequence, data.portrait);
         }
 
         // Override de voice clips si el DialogueData trae los suyos
@@ -210,8 +219,15 @@ public class DialogueBoxView : MonoBehaviour
         }
 
         DialogueLine line = _lines[_currentLineIndex];
+        _currentLineData = line;
+        _currentPortraitSequence = ResolvePortraitSequence(line);
         _currentLineFullText = line.text;
         _waitingForAdvance = false;
+        _lineCompletionHandled = false;
+
+        ApplyPortraitSprite(GetIdlePortraitSprite(_currentPortraitSequence, GetIdlePortraitSprite(_defaultPortraitSequence, portraitImage != null ? portraitImage.sprite : null)));
+
+        StopPortraitRoutine();
 
         // Aplicar modificador de LC
         if (line.lcModifier != 0f && TrustManager.Instance != null)
@@ -237,15 +253,42 @@ public class DialogueBoxView : MonoBehaviour
                 -1f,          // volume: usa el default del TypewriterEffect
                 charsPerSound,
                 typingSpeed,
-                () => OnLineTypingComplete(line)
+                () => OnLineTypingComplete(line, _currentPortraitSequence)
             );
+
+            if (HasPortraitFrames(_currentPortraitSequence.typingFrames))
+            {
+                _portraitRoutine = StartCoroutine(BeginTypingPortraitLoopWhenTypingStarts(_currentPortraitSequence));
+            }
         }
     }
 
-    private void OnLineTypingComplete(DialogueLine line)
+    private void OnLineTypingComplete(DialogueLine line, DialoguePortraitSequence portraitSequence)
     {
+        if (_lineCompletionHandled)
+        {
+            return;
+        }
+
+        _lineCompletionHandled = true;
+        StopPortraitRoutine();
+        StartCoroutine(HandleLineCompleted(line, portraitSequence));
+    }
+
+    private IEnumerator HandleLineCompleted(DialogueLine line, DialoguePortraitSequence portraitSequence)
+    {
+        if (HasPortraitFrames(portraitSequence.postTypingFrames))
+        {
+            yield return StartCoroutine(PlayPortraitFramesOnce(portraitSequence.postTypingFrames));
+        }
+        else
+        {
+            ApplyPortraitSprite(GetIdlePortraitSprite(portraitSequence, GetIdlePortraitSprite(_defaultPortraitSequence, portraitImage != null ? portraitImage.sprite : null)));
+        }
+
         if (line.autoAdvance)
         {
+            _skipFinalCloseDelayForPendingAdvance = line.skipFinalCloseDelay;
             StartCoroutine(AutoAdvanceAfter(Mathf.Max(0f, line.pauseAfter)));
         }
         else
@@ -264,7 +307,9 @@ public class DialogueBoxView : MonoBehaviour
     private void AdvanceLine(bool immediate = false)
     {
         StopAllCoroutines();
+        StopPortraitRoutine();
         _waitingForAdvance = false;
+        _skipFinalCloseDelayForPendingAdvance = _currentLineData.skipFinalCloseDelay;
         _currentLineIndex++;
         StartCoroutine(AdvanceWithDelay(immediate));
     }
@@ -276,11 +321,13 @@ public class DialogueBoxView : MonoBehaviour
         if (isEnd)
         {
             // Última línea: mantener el texto visible durante waitAfterLastLine, luego cerrar.
-            if (!immediate && waitAfterLastLine > 0f)
+            if (!immediate && !_skipFinalCloseDelayForPendingAdvance && waitAfterLastLine > 0f)
                 yield return new WaitForSecondsRealtime(waitAfterLastLine);
 
             if (typewriterEffect != null)
                 typewriterEffect.ClearText();
+
+            _skipFinalCloseDelayForPendingAdvance = false;
 
             yield return StartCoroutine(AnimateClose());
         }
@@ -305,7 +352,7 @@ public class DialogueBoxView : MonoBehaviour
         if (typewriterEffect != null)
             typewriterEffect.CompleteImmediate(_currentLineFullText);
 
-        _waitingForAdvance = true;
+        OnLineTypingComplete(_currentLineData, _currentPortraitSequence);
     }
 
     // ─────────────────────────────────────────────────────────
@@ -388,6 +435,8 @@ public class DialogueBoxView : MonoBehaviour
         if (portraitContainer != null)
             portraitContainer.SetActive(false);
 
+        StopPortraitRoutine();
+
         if (typewriterEffect != null)
             typewriterEffect.ClearText();
 
@@ -417,4 +466,128 @@ public class DialogueBoxView : MonoBehaviour
     /// Ease In Quad: aceleración suave desde 0. Cierre decisivo y limpio.
     /// </summary>
     private static float EaseInQuad(float t) => t * t;
+
+    private DialoguePortraitSequence ResolvePortraitSequence(DialogueLine line)
+    {
+        if (line.portraitSequenceAsset != null)
+        {
+            return line.portraitSequenceAsset.sequence;
+        }
+
+        return line.usePortraitSequenceOverride ? line.portraitSequenceOverride : _defaultPortraitSequence;
+    }
+
+    private static DialoguePortraitSequence ResolvePortraitSequence(DialoguePortraitSequenceAsset asset, DialoguePortraitSequence fallback)
+    {
+        return asset != null ? asset.sequence : fallback;
+    }
+
+    private static bool HasPortraitFrames(DialoguePortraitFrame[] frames)
+    {
+        return frames != null && frames.Length > 0;
+    }
+
+    private Sprite GetIdlePortraitSprite(DialoguePortraitSequence sequence, Sprite fallback)
+    {
+        return sequence.idleSprite != null ? sequence.idleSprite : fallback;
+    }
+
+    private void ApplyPortraitSprite(Sprite sprite)
+    {
+        if (portraitImage != null && sprite != null)
+        {
+            portraitImage.sprite = sprite;
+        }
+    }
+
+    private void StopPortraitRoutine()
+    {
+        if (_portraitRoutine != null)
+        {
+            StopCoroutine(_portraitRoutine);
+            _portraitRoutine = null;
+        }
+    }
+
+    private IEnumerator PlayTypingPortraitLoop(DialoguePortraitSequence sequence)
+    {
+        if (!HasPortraitFrames(sequence.typingFrames))
+        {
+            yield break;
+        }
+
+        while (typewriterEffect != null && typewriterEffect.IsTyping)
+        {
+            foreach (DialoguePortraitFrame frame in sequence.typingFrames)
+            {
+                if (typewriterEffect == null || !typewriterEffect.IsTyping)
+                {
+                    yield break;
+                }
+
+                yield return StartCoroutine(PlayPortraitFrame(frame, stopWhenTypingEnds: true));
+            }
+        }
+    }
+
+    private IEnumerator BeginTypingPortraitLoopWhenTypingStarts(DialoguePortraitSequence sequence)
+    {
+        while (typewriterEffect != null && !typewriterEffect.IsTyping)
+        {
+            yield return null;
+        }
+
+        if (typewriterEffect == null || !typewriterEffect.IsTyping)
+        {
+            yield break;
+        }
+
+        yield return StartCoroutine(PlayTypingPortraitLoop(sequence));
+    }
+
+    private IEnumerator PlayPortraitFramesOnce(DialoguePortraitFrame[] frames)
+    {
+        if (!HasPortraitFrames(frames))
+        {
+            yield break;
+        }
+
+        int maxRepeats = 1;
+        foreach (DialoguePortraitFrame frame in frames)
+        {
+            maxRepeats = Mathf.Max(maxRepeats, Mathf.Max(1, frame.repeatCount));
+        }
+
+        for (int repeatIndex = 0; repeatIndex < maxRepeats; repeatIndex++)
+        {
+            foreach (DialoguePortraitFrame frame in frames)
+            {
+                int frameRepeats = Mathf.Max(1, frame.repeatCount);
+                if (repeatIndex >= frameRepeats)
+                {
+                    continue;
+                }
+
+                ApplyPortraitSprite(frame.sprite);
+                yield return new WaitForSecondsRealtime(Mathf.Max(0.01f, frame.duration));
+            }
+        }
+    }
+
+    private IEnumerator PlayPortraitFrame(DialoguePortraitFrame frame, bool stopWhenTypingEnds)
+    {
+        int repeatCount = Mathf.Max(1, frame.repeatCount);
+        float duration = Mathf.Max(0.01f, frame.duration);
+
+        for (int repeat = 0; repeat < repeatCount; repeat++)
+        {
+            if (stopWhenTypingEnds && (typewriterEffect == null || !typewriterEffect.IsTyping))
+            {
+                yield break;
+            }
+
+            ApplyPortraitSprite(frame.sprite);
+            yield return new WaitForSecondsRealtime(duration);
+        }
+    }
 }

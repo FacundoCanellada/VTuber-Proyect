@@ -32,6 +32,12 @@ public class PostIntroSequence : MonoBehaviour
     [Tooltip("El DialogueData ScriptableObject con el diálogo que se reproduce al terminar la cinemática.")]
     [SerializeField] private DialogueData introDialogueData;
 
+    [Header("Secuencia Telefónica Opcional")]
+    [Tooltip("Conversación telefónica que arranca al terminar el cuadro de diálogo principal.")]
+    [SerializeField] private PhoneConversationData followUpPhoneConversation;
+    [Tooltip("Delay opcional antes de arrancar la conversación telefónica.")]
+    [SerializeField] private float followUpPhoneConversationDelay = 0.15f;
+
     /// <summary>
     /// Bloquea el input del jugador inmediatamente (sin iniciar la cinemática).
     /// Llamar desde IntroController antes de restaurar Time.timeScale para que el
@@ -94,9 +100,30 @@ public class PostIntroSequence : MonoBehaviour
 
     private void OnDialogueComplete()
     {
-        // Liberar el bloqueo cinemático — el jugador recupera el control completo.
+        if (followUpPhoneConversation != null && DialogueManager.Instance != null)
+        {
+            StartCoroutine(BeginPhoneConversationAfterDelay());
+            return;
+        }
+
         playerMovement.IsInputBlocked = false;
         Debug.Log("[PostIntroSequence] Diálogo de intro finalizado. Control devuelto al jugador.");
+    }
+
+    private IEnumerator BeginPhoneConversationAfterDelay()
+    {
+        if (followUpPhoneConversationDelay > 0f)
+        {
+            yield return new WaitForSecondsRealtime(followUpPhoneConversationDelay);
+        }
+
+        DialogueManager.Instance.StartPhoneConversation(followUpPhoneConversation, OnPhoneConversationComplete);
+    }
+
+    private void OnPhoneConversationComplete()
+    {
+        playerMovement.IsInputBlocked = false;
+        Debug.Log("[PostIntroSequence] Conversación telefónica finalizada. Control devuelto al jugador.");
     }
 
     private bool ValidateReferences()

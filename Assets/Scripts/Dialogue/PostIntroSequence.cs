@@ -38,6 +38,8 @@ public class PostIntroSequence : MonoBehaviour
     [Tooltip("Delay opcional antes de arrancar la conversación telefónica.")]
     [SerializeField] private float followUpPhoneConversationDelay = 0.15f;
 
+    private bool _incomingCallCueStarted;
+
     /// <summary>
     /// Bloquea el input del jugador inmediatamente (sin iniciar la cinemática).
     /// Llamar desde IntroController antes de restaurar Time.timeScale para que el
@@ -55,6 +57,8 @@ public class PostIntroSequence : MonoBehaviour
     public void Begin()
     {
         if (!ValidateReferences()) return;
+        StopAllCoroutines();
+        _incomingCallCueStarted = false;
         StartCoroutine(Sequence());
     }
 
@@ -88,42 +92,63 @@ public class PostIntroSequence : MonoBehaviour
         //    PlayerMovementNew.FixedUpdate zerarea la velocidad mientras IsInputBlocked+IsDialogueActive estén activos.
         if (introDialogueData != null && DialogueManager.Instance != null)
         {
-            DialogueManager.Instance.StartDialogue(introDialogueData, OnDialogueComplete);
+            DialoguePlaybackCallbacks playbackCallbacks = BuildIntroDialogueCallbacks();
+            DialogueManager.Instance.StartDialogue(introDialogueData, playbackCallbacks, OnIntroDialogueComplete);
         }
         else
         {
             Debug.LogWarning("[PostIntroSequence] No hay DialogueData asignado o DialogueManager no está en la escena.");
             // Si no hay diálogo, liberar el input de todas formas para no bloquear al jugador
-            playerMovement.IsInputBlocked = false;
+            ReleasePlayerControl("[PostIntroSequence] No se pudo iniciar el diálogo de intro. Control devuelto al jugador.");
         }
     }
 
-    private void OnDialogueComplete()
+    private DialoguePlaybackCallbacks BuildIntroDialogueCallbacks()
     {
-        if (followUpPhoneConversation != null && DialogueManager.Instance != null)
+        if (followUpPhoneConversation == null)
         {
-            StartCoroutine(BeginPhoneConversationAfterDelay());
+            return DialoguePlaybackCallbacks.None;
+        }
+
+        DialoguePlaybackCallbacks callbacks = DialoguePlaybackCallbacks.None;
+        callbacks.onLineCompleted = HandleIntroLineCompleted;
+        return callbacks;
+    }
+
+    private void HandleIntroLineCompleted(DialoguePlaybackContext context)
+    {
+        if (_incomingCallCueStarted || !context.IsLastLine || followUpPhoneConversation == null || DialogueManager.Instance == null)
+        {
             return;
         }
 
-        playerMovement.IsInputBlocked = false;
-        Debug.Log("[PostIntroSequence] Diálogo de intro finalizado. Control devuelto al jugador.");
+        _incomingCallCueStarted = DialogueManager.Instance.PlayPhoneIncomingCue(followUpPhoneConversation);
     }
 
-    private IEnumerator BeginPhoneConversationAfterDelay()
+    private void OnIntroDialogueComplete()
+    {
+        if (followUpPhoneConversation != null && DialogueManager.Instance != null)
+        {
+            StartCoroutine(BeginPhoneConversationAfterDelay(_incomingCallCueStarted));
+            return;
+        }
+
+        ReleasePlayerControl("[PostIntroSequence] Diálogo de intro finalizado. Control devuelto al jugador.");
+    }
+
+    private IEnumerator BeginPhoneConversationAfterDelay(bool skipIncomingCue)
     {
         if (followUpPhoneConversationDelay > 0f)
         {
             yield return new WaitForSecondsRealtime(followUpPhoneConversationDelay);
         }
 
-        DialogueManager.Instance.StartPhoneConversation(followUpPhoneConversation, OnPhoneConversationComplete);
+        DialogueManager.Instance.StartPhoneConversation(followUpPhoneConversation, skipIncomingCue, OnPhoneConversationComplete);
     }
 
     private void OnPhoneConversationComplete()
     {
-        playerMovement.IsInputBlocked = false;
-        Debug.Log("[PostIntroSequence] Conversación telefónica finalizada. Control devuelto al jugador.");
+        ReleasePlayerControl("[PostIntroSequence] Conversación telefónica finalizada. Control devuelto al jugador.");
     }
 
     private bool ValidateReferences()
@@ -144,5 +169,22 @@ public class PostIntroSequence : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    private void ReleasePlayerControl(string logMessage)
+    {
+        playerMovement.IsInputBlocked = false;
+
+        if (characterRb != null)
+        {
+            characterRb.linearVelocity = Vector2.zero;
+        }
+
+        if (animationController != null && !animationController.IsMovementLockedByEmote())
+        {
+            animationController.UpdateAnimation(Vector2.zero);
+        }
+
+        Debug.Log(logMessage);
     }
 }

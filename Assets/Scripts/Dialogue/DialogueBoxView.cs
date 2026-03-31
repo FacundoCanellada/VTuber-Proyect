@@ -59,6 +59,7 @@ public class DialogueBoxView : MonoBehaviour
     private System.Action _onComplete;
     private Vector2 _originalBoxSize;
     private bool _hasCachedOriginalBoxSize;
+    private DialoguePlaybackCallbacks _playbackCallbacks;
     private DialoguePortraitSequence _defaultPortraitSequence;
     private DialogueLine _currentLineData;
     private DialoguePortraitSequence _currentPortraitSequence;
@@ -110,6 +111,11 @@ public class DialogueBoxView : MonoBehaviour
     /// </summary>
     public void StartDialogue(DialogueData data, System.Action onComplete)
     {
+        StartDialogue(data, DialoguePlaybackCallbacks.None, onComplete);
+    }
+
+    public void StartDialogue(DialogueData data, DialoguePlaybackCallbacks playbackCallbacks, System.Action onComplete)
+    {
         // Detener cualquier coroutine anterior (por si se interrumpe)
         StopAllCoroutines();
         CacheOriginalBoxSize();
@@ -123,6 +129,7 @@ public class DialogueBoxView : MonoBehaviour
         _isAnimatingClose = false;
         _lineCompletionHandled = false;
         _skipFinalCloseDelayForPendingAdvance = false;
+        _playbackCallbacks = playbackCallbacks;
         _defaultPortraitSequence = ResolvePortraitSequence(data.defaultPortraitSequenceAsset, data.defaultPortraitSequence);
 
         // Nombre del personaje
@@ -228,6 +235,7 @@ public class DialogueBoxView : MonoBehaviour
         ApplyPortraitSprite(GetIdlePortraitSprite(_currentPortraitSequence, GetIdlePortraitSprite(_defaultPortraitSequence, portraitImage != null ? portraitImage.sprite : null)));
 
         StopPortraitRoutine();
+        _playbackCallbacks.NotifyLineStarted(line, _currentLineIndex, _lines.Length);
 
         // Aplicar modificador de LC
         if (line.lcModifier != 0f && TrustManager.Instance != null)
@@ -285,6 +293,8 @@ public class DialogueBoxView : MonoBehaviour
         {
             ApplyPortraitSprite(GetIdlePortraitSprite(portraitSequence, GetIdlePortraitSprite(_defaultPortraitSequence, portraitImage != null ? portraitImage.sprite : null)));
         }
+
+        _playbackCallbacks.NotifyLineCompleted(line, _currentLineIndex, _lines.Length);
 
         if (line.autoAdvance)
         {
@@ -448,6 +458,7 @@ public class DialogueBoxView : MonoBehaviour
         }
 
         _isAnimatingClose = false;
+        _playbackCallbacks = DialoguePlaybackCallbacks.None;
 
         // Notificar al DialogueManager que terminó
         _onComplete?.Invoke();

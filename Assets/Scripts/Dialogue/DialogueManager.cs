@@ -53,6 +53,11 @@ public class DialogueManager : MonoBehaviour
     /// <param name="onComplete">Callback opcional al terminar el diálogo.</param>
     public void StartDialogue(DialogueData data, System.Action onComplete = null)
     {
+        StartDialogue(data, DialoguePlaybackCallbacks.None, onComplete);
+    }
+
+    public void StartDialogue(DialogueData data, DialoguePlaybackCallbacks playbackCallbacks, System.Action onComplete = null)
+    {
         if (data == null || data.lines == null || data.lines.Length == 0)
         {
             Debug.LogWarning("[DialogueManager] El DialogueData es null o no tiene líneas.");
@@ -71,10 +76,15 @@ public class DialogueManager : MonoBehaviour
         if (dialogueCanvas != null)
             dialogueCanvas.SetActive(true);
 
-        dialogueBoxView.StartDialogue(data, HandleDialogueComplete);
+        dialogueBoxView.StartDialogue(data, playbackCallbacks, HandleDialogueComplete);
     }
 
     public void StartPhoneConversation(PhoneConversationData data, System.Action onComplete = null)
+    {
+        StartPhoneConversation(data, false, onComplete);
+    }
+
+    public void StartPhoneConversation(PhoneConversationData data, bool skipIncomingCue, System.Action onComplete = null)
     {
         if (data == null || data.lines == null || data.lines.Length == 0)
         {
@@ -82,7 +92,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (phoneConversationView == null)
+        if (!EnsurePhoneConversationView())
         {
             Debug.LogError("[DialogueManager] No se asignó el PhoneConversationView en el Inspector.");
             return;
@@ -91,21 +101,66 @@ public class DialogueManager : MonoBehaviour
         IsDialogueActive = true;
         _onDialogueComplete = onComplete;
 
+        // Keep the canvas active — phone UI may live inside it.
+        // Only hide the dialogue box view so it doesn't overlap.
         if (dialogueCanvas != null)
-            dialogueCanvas.SetActive(false);
+            dialogueCanvas.SetActive(true);
 
-        phoneConversationView.StartConversation(data, HandleDialogueComplete);
+        if (dialogueBoxView != null)
+            dialogueBoxView.gameObject.SetActive(false);
+
+        phoneConversationView.StartConversation(data, skipIncomingCue, HandleDialogueComplete);
+    }
+
+    public bool PlayPhoneIncomingCue(PhoneConversationData data)
+    {
+        if (data == null)
+        {
+            Debug.LogWarning("[DialogueManager] No se puede reproducir la llamada entrante porque el PhoneConversationData es null.");
+            return false;
+        }
+
+        if (!EnsurePhoneConversationView())
+        {
+            Debug.LogError("[DialogueManager] No se pudo preparar el PhoneConversationView para la llamada entrante.");
+            return false;
+        }
+
+        return phoneConversationView.PlayIncomingCue(data);
     }
 
     private void HandleDialogueComplete()
     {
         IsDialogueActive = false;
 
-        if (dialogueCanvas != null)
-            dialogueCanvas.SetActive(false);
+        // Re-enable the dialogue box for future use (it stays visually hidden via its own CanvasGroup alpha).
+        if (dialogueBoxView != null)
+            dialogueBoxView.gameObject.SetActive(true);
 
         System.Action callback = _onDialogueComplete;
         _onDialogueComplete = null;
         callback?.Invoke();
+
+        // Only hide the canvas if the callback didn't start a new dialogue/phone conversation.
+        if (!IsDialogueActive && dialogueCanvas != null)
+            dialogueCanvas.SetActive(false);
+    }
+
+    private bool EnsurePhoneConversationView()
+    {
+        if (phoneConversationView != null)
+        {
+            return true;
+        }
+
+        phoneConversationView = FindFirstObjectByType<PhoneConversationView>();
+        if (phoneConversationView != null)
+        {
+            return true;
+        }
+
+        GameObject runtimePhoneView = new GameObject("PhoneConversationRuntimeView");
+        phoneConversationView = runtimePhoneView.AddComponent<PhoneConversationView>();
+        return phoneConversationView != null;
     }
 }

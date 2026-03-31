@@ -20,6 +20,14 @@ public struct PhoneConversationOpeningSequence
     [Min(0f)]
     public float ringDuration;
 
+    [Tooltip("Cuántas veces se repite el sonido de ring antes de atender. Usa 2 para una llamada más marcada.")]
+    [Min(1)]
+    public int ringRepeatCount;
+
+    [Tooltip("Pausa adicional entre rings cuando ringRepeatCount es mayor que 1.")]
+    [Min(0f)]
+    public float ringInterval;
+
     [Tooltip("Si está activo, muestra el icono de advertencia durante el ring.")]
     public bool showWarningIconDuringRing;
 
@@ -32,9 +40,16 @@ public struct PhoneConversationOpeningSequence
     [Tooltip("Clip del momento en que Ahiiruw atiende el teléfono.")]
     public AudioClip answerClip;
 
-    [Tooltip("Delay entre que termina el ring y suena el clip de atender.")]
+    [Tooltip("Delay entre que empieza la animación de atender y suena el clip de respuesta.")]
     [Min(0f)]
     public float answerClipDelay;
+
+    [Tooltip("Nombre exacto del estado del Animator para la animación de atender. Opcional.")]
+    public string answerAnimationStateName;
+
+    [Tooltip("Crossfade usado al entrar a la animación de atender si answerAnimationStateName está configurado.")]
+    [Min(0f)]
+    public float answerAnimationCrossFadeDuration;
 
     [Tooltip("Si está activo, dispara el emote/animación del personaje al atender.")]
     public bool triggerCharacterEmoteOnAnswer;

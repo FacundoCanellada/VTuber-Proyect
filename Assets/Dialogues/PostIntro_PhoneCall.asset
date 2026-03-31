@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2485886086686d1459bc1a10e9b97fec, type: 3}
+  m_Name: PostIntro_PhoneCall
+  m_EditorClassIdentifier: Assembly-CSharp::PhoneConversationData
+  characterName: 
+  phoneVoiceClips: []
+  defaultWarningIconSprite: {fileID: 0}
+  openingSequence:
+    enabled: 1
+    ringClip: {fileID: 8300000, guid: ce2733f18a8c52b4cbd11be053bdb70f, type: 3}
+    ringDuration: 0.5
+    ringRepeatCount: 2
+    ringInterval: 1.5
+    showWarningIconDuringRing: 1
+    warningIconSprite: {fileID: 21300000, guid: b7105dc370ab9264eb56f2f21e25ee6f, type: 3}
+    warningMode: 1
+    answerClip: {fileID: 8300000, guid: bfd5cbce30c014c41af7d6a7df5087f6, type: 3}
+    answerClipDelay: 0.2
+    answerAnimationStateName: AnswerPhone
+    answerAnimationCrossFadeDuration: 0
+    triggerCharacterEmoteOnAnswer: 0
+    dialogueStartDelayAfterAnswer: 0
+    hideWarningIconWhenAnswered: 1
+  lines:
+  - text: Oyee hermanaaa
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: "\xBFTe acuerdas lo que dec\xEDa mam\xE1 de llevar los originales?"
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: yo bien confiado con mis copias
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: "\xBFme las llevas? porfaa"
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: "todos los documentos est\xE1n en mi cuarto, seg\xFAn yo"
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: andale, te debo una
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: bueno, varias
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: bueno, un chingo la neta
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: este...
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0
+  - text: "Tr\xE1emelas aqu\xED, estoy en la imprenta, ya sabes cu\xE1l"
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    skipFinalPause: 0
+    cue:
+      playRingBeforeLine: 0
+      ringClip: {fileID: 0}
+      ringDuration: 0
+      showWarningIcon: 0
+      warningIconSprite: {fileID: 0}
+      warningMode: 0
+      warningIconDuration: 0
+      triggerCharacterEmote: 0

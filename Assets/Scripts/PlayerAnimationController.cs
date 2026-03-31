@@ -247,6 +247,42 @@ public class PlayerAnimationController : MonoBehaviour
         return true;
     }
 
+    public bool TryPlayOneShotState(string stateName, float crossFadeDuration = 0.05f)
+    {
+        if (animator == null || string.IsNullOrWhiteSpace(stateName))
+        {
+            return false;
+        }
+
+        SetJitterDirectionLock(false);
+        currentSpeed = 0f;
+        animator.SetFloat(speedParamID, 0f);
+        animator.SetBool(isRunningParamID, false);
+
+        if (hasIsEmotingParameter)
+        {
+            animator.SetBool(isEmotingParamID, false);
+        }
+
+        int stateHash = Animator.StringToHash(stateName);
+        if (animator.HasState(0, stateHash))
+        {
+            animator.CrossFadeInFixedTime(stateHash, Mathf.Max(0f, crossFadeDuration));
+            return true;
+        }
+
+        string baseLayerStateName = $"Base Layer.{stateName}";
+        int baseLayerHash = Animator.StringToHash(baseLayerStateName);
+        if (animator.HasState(0, baseLayerHash))
+        {
+            animator.CrossFadeInFixedTime(baseLayerHash, Mathf.Max(0f, crossFadeDuration));
+            return true;
+        }
+
+        Debug.LogWarning($"[PlayerAnimationController] No se encontró el estado de Animator '{stateName}' para reproducir la animación one-shot.");
+        return false;
+    }
+
     public void CancelEmote()
     {
         if (animator == null || !hasIsEmotingParameter || !emoteActive)

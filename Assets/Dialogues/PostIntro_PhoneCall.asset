@@ -192,3 +192,4 @@ MonoBehaviour:
       warningMode: 0
       warningIconDuration: 0
       triggerCharacterEmote: 0
+  hangUpClip: {fileID: 8300000, guid: bfd5cbce30c014c41af7d6a7df5087f6, type: 3}

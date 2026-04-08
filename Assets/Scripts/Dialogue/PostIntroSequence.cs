@@ -38,6 +38,14 @@ public class PostIntroSequence : MonoBehaviour
     [Tooltip("Delay opcional antes de arrancar la conversación telefónica.")]
     [SerializeField] private float followUpPhoneConversationDelay = 0.15f;
 
+    [Header("Diálogo Post-Teléfono (Opcional)")]
+    [Tooltip("Diálogo normal del personaje que arranca al terminar la conversación telefónica.\n" +
+             "Se activa el dialogue box de nuevo, siguiendo la misma lógica del diálogo de intro.")]
+    [SerializeField] private DialogueData followUpDialogueData;
+    [Tooltip("Indicador de misión que aparece junto con la primera línea del diálogo post-teléfono. Opcional.\n" +
+             "Asignar un MissionIndicatorData para que el panel de tarea se deslice desde la izquierda.")]
+    [SerializeField] private MissionIndicatorData followUpMissionIndicator;
+
     private bool _incomingCallCueStarted;
 
     /// <summary>
@@ -148,7 +156,34 @@ public class PostIntroSequence : MonoBehaviour
 
     private void OnPhoneConversationComplete()
     {
+        if (followUpDialogueData != null && DialogueManager.Instance != null)
+        {
+            DialoguePlaybackCallbacks callbacks = BuildFollowUpDialogueCallbacks();
+            DialogueManager.Instance.StartDialogue(
+                followUpDialogueData,
+                callbacks,
+                () => ReleasePlayerControl("[PostIntroSequence] Diálogo post-teléfono finalizado. Control devuelto al jugador.")
+            );
+            return;
+        }
+
         ReleasePlayerControl("[PostIntroSequence] Conversación telefónica finalizada. Control devuelto al jugador.");
+    }
+
+    private DialoguePlaybackCallbacks BuildFollowUpDialogueCallbacks()
+    {
+        DialoguePlaybackCallbacks callbacks = DialoguePlaybackCallbacks.None;
+
+        if (followUpMissionIndicator != null)
+        {
+            callbacks.onLineStarted = ctx =>
+            {
+                if (ctx.IsFirstLine)
+                    MissionIndicatorView.Instance?.Show(followUpMissionIndicator);
+            };
+        }
+
+        return callbacks;
     }
 
     private bool ValidateReferences()

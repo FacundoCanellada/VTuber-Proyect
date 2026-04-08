@@ -312,6 +312,10 @@ public class PhoneConversationView : MonoBehaviour
         if (!immediate && !skipFinalPause && finalPause > 0f)
             yield return new WaitForSecondsRealtime(finalPause);
 
+        // Sonido de colgar el teléfono (justo al empezar a terminar la conversación).
+        if (_conversationData?.hangUpClip != null && cueAudioSource != null)
+            cueAudioSource.PlayOneShot(_conversationData.hangUpClip);
+
         // Fade out de la última línea.
         if (!immediate)
             yield return StartCoroutine(AnimateLineOut());

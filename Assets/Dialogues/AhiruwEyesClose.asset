@@ -22,6 +22,6 @@ MonoBehaviour:
       repeatCount: 4
       duration: 0.2
     postTypingFrames:
-    - sprite: {fileID: -7139880986659442855, guid: 7b07072fa9efeff4dae16b58bbdd36be, type: 3}
+    - sprite: {fileID: -1546673987933591819, guid: cafe5590bb4547140ad3c2ea37d2fb25, type: 3}
       repeatCount: 1
       duration: 0.2

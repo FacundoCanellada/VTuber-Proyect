@@ -141,4 +141,7 @@ public class PhoneConversationData : ScriptableObject
 
     [Tooltip("Líneas de la conversación telefónica.")]
     public PhoneConversationLine[] lines;
+
+    [Tooltip("Clip que suena al colgar el teléfono (al terminar todas las líneas de diálogo). Opcional.")]
+    public AudioClip hangUpClip;
 }

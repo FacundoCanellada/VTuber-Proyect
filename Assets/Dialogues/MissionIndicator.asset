@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b191a2b971b6643815265deda7d714, type: 3}
+  m_Name: MissionIndicator
+  m_EditorClassIdentifier: Assembly-CSharp::MissionIndicatorData
+  title: Nueva Tarea
+  description: Llevar Documentos a tu hermano
+  icon: {fileID: -7151487848368215384, guid: 06ab8a95e1a165346a38d07363df437c, type: 3}
+  showSound: {fileID: 0}

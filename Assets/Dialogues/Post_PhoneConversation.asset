@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0be66d739e13f34e8122bdbdf8aa0a8, type: 3}
+  m_Name: Post_PhoneConversation
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  characterName: Ahiiruw
+  portrait: {fileID: -2579209497633913200, guid: 1adbbda2980800a47b240022ccd1b4dd, type: 3}
+  defaultPortraitSequenceAsset: {fileID: 0}
+  defaultPortraitSequence:
+    idleSprite: {fileID: -4062690193678413428, guid: 7aea46e4e794d86408b6da10247c1c7e, type: 3}
+    typingFrames: []
+    postTypingFrames: []
+  characterVoiceClips: []
+  lines:
+  - text: 'PTM, me acaba de kagar la intro ALV '
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    lcModifier: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    usePortraitSequenceOverride: 1
+    portraitSequenceAsset: {fileID: 0}
+    portraitSequenceOverride:
+      idleSprite: {fileID: -7824312338582416666, guid: 43690230cce00a9469d45df2cff0117d, type: 3}
+      typingFrames: []
+      postTypingFrames:
+      - sprite: {fileID: 5696034722055493312, guid: b2af31e6e6fa8ee4aba78e76b988d3cc, type: 3}
+        repeatCount: 1
+        duration: 0.6
+    skipFinalCloseDelay: 0
+  - text: Fack
+    voiceClip: {fileID: 0}
+    typingSpeed: -1
+    charsPerSound: 0
+    lcModifier: 0
+    autoAdvance: 1
+    pauseAfter: 0
+    usePortraitSequenceOverride: 1
+    portraitSequenceAsset: {fileID: 0}
+    portraitSequenceOverride:
+      idleSprite: {fileID: -4062690193678413428, guid: 7aea46e4e794d86408b6da10247c1c7e, type: 3}
+      typingFrames: []
+      postTypingFrames:
+      - sprite: {fileID: -8694335475555191440, guid: 8a7525b3c1ed4f947a7e9febc79ac478, type: 3}
+        repeatCount: 1
+        duration: 0.6
+    skipFinalCloseDelay: 0

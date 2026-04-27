@@ -89,11 +89,23 @@ namespace VTuberProject.Lighting
         [Range(0f, 1f)]
         public float windowLightMultiplier = 0.4f; // 60% de reducción
 
+        [Header("Cycle Control")]
+        [Tooltip("Activar o desactivar el ciclo día/noche. Cuando está desactivado, la luz se mantiene neutral (blanca, intensidad 1).")]
+        public bool enableCycle = false;
+
+        [Tooltip("Color neutro de la luz cuando el ciclo está desactivado")]
+        public Color neutralLightColor = Color.white;
+
+        [Tooltip("Intensidad de la luz cuando el ciclo está desactivado")]
+        [Range(0f, 2f)]
+        public float neutralLightIntensity = 1f;
+
         [Header("Debug")]
         public bool showDebugInfo = false;
 
         // Estado interno
         private TimeOfDay currentPeriod = TimeOfDay.Day;
+        private bool wasEnabledLastFrame = false;
         private bool indoorLightsOn = false;
         private float timeChangePerSecond;
 
@@ -108,11 +120,33 @@ namespace VTuberProject.Lighting
         private void Start()
         {
             CalculateTimeChangeRate();
-            UpdateLighting();
+
+            if (enableCycle)
+            {
+                wasEnabledLastFrame = true;
+                UpdateLighting();
+            }
+            else
+            {
+                ApplyNeutralLight();
+            }
         }
 
         private void Update()
         {
+            if (!enableCycle)
+            {
+                // Si el ciclo acaba de desactivarse, restaurar luz neutral
+                if (wasEnabledLastFrame)
+                {
+                    ApplyNeutralLight();
+                    wasEnabledLastFrame = false;
+                }
+                return;
+            }
+
+            wasEnabledLastFrame = true;
+
             if (autoAdvanceTime)
             {
                 AdvanceTime();
@@ -231,6 +265,27 @@ namespace VTuberProject.Lighting
                 return TimeOfDay.Sunset;
             else
                 return TimeOfDay.Night;
+        }
+
+        private void ApplyNeutralLight()
+        {
+            if (globalLight == null) return;
+            globalLight.color = neutralLightColor;
+            globalLight.intensity = neutralLightIntensity;
+        }
+
+        /// <summary>
+        /// Activa o desactiva el ciclo día/noche desde código.
+        /// Al desactivar, la luz vuelve al color e intensidad neutral.
+        /// </summary>
+        public void EnableCycle(bool active)
+        {
+            enableCycle = active;
+            if (!active)
+            {
+                ApplyNeutralLight();
+                wasEnabledLastFrame = false;
+            }
         }
 
         /// <summary>

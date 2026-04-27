@@ -1,0 +1,26 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "Evelyth_V003.moc3",
+		"Textures": [
+			"Evelyth_V003.4096/texture_00.png"
+		],
+		"Physics": "Evelyth_V003.physics3.json",
+		"DisplayInfo": "Evelyth_V003.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeLOpen",
+				"ParamEyeROpen"
+			]
+		}
+	]
+}

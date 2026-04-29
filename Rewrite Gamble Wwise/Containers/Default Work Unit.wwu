@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{13C34537-27A8-4172-8E59-62791B533014}" SchemaVersion="133">
+	<Containers>
+		<WorkUnit Name="Default Work Unit" ID="{13C34537-27A8-4172-8E59-62791B533014}" PersistMode="Standalone">
+			<ChildrenList>
+				<MusicSwitchContainer Name="EvelythBattle" ID="{A05764BC-BF25-4061-BE1D-0F89999261B1}" ShortID="467822840">
+					<PropertyList>
+						<Property Name="Tempo" Type="Real64" Value="105"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+						</Reference>
+						<Reference Name="TransitionRoot">
+							<Custom>
+								<MusicTransition Name="Root" ID="{CFA785B3-2B81-4135-8175-285E8DC7759E}">
+									<PropertyList>
+										<Property Name="IsFolder" Type="bool" Value="True"/>
+									</PropertyList>
+									<ChildrenList>
+										<MusicTransition Name="Transition" ID="{2AE2B004-B01B-42F1-8D74-20E469BBF0AB}">
+											<TransitionInfo/>
+										</MusicTransition>
+										<MusicTransition Name="Transition" ID="{0A8547AF-EDAC-4CFA-94F8-666C74370732}">
+											<PropertyList>
+												<Property Name="DestinationContextType" Type="int16" Value="2"/>
+												<Property Name="ExitSourceAt" Type="int16" Value="2"/>
+												<Property Name="SourceContextType" Type="int16" Value="2"/>
+												<Property Name="UseTransitionObject" Type="bool" Value="True"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="DestinationContextObject">
+													<ObjectRef Name="TENSE-BATTLE" ID="{68739AD4-ED0D-4396-9374-9B3FD5902603}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+												</Reference>
+												<Reference Name="SourceContextObject">
+													<ObjectRef Name="PRESENTATION-MID" ID="{D0082CD0-60F7-4DFA-B54B-1DD41D3FF032}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+												</Reference>
+											</ReferenceList>
+											<TransitionInfo>
+												<TransitionObjectRef Name="EVELYTH-PRESENTATION-POST" ID="{65CA6532-30C2-4F8E-95E7-86180004635C}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+											</TransitionInfo>
+										</MusicTransition>
+									</ChildrenList>
+									<TransitionInfo/>
+								</MusicTransition>
+							</Custom>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<MusicPlaylistContainer Name="PRESENTATION-PRE" ID="{476A0E72-01E2-42DE-A81E-5EC8B4CEF702}" ShortID="89092938">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+								</Reference>
+								<Reference Name="PlaylistRoot">
+									<Custom>
+										<MusicPlaylistItem Name="" ID="{BB406113-0CCA-4667-A7E7-AC6881D71D00}" ShortID="318815070">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{AB720FF8-F7B3-45EC-A443-EEED942CB255}" ShortID="967853201">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="EVELYTH-PRESENTATION-PRE" ID="{D0ED51BA-AD00-47E8-848B-6DB13C3BBDE7}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
+									</Custom>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{FD006688-6435-4572-B8EC-8919D0A97716}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{906D5C09-BA73-48D1-9CC5-D4A1E48900DC}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicSegment Name="EVELYTH-PRESENTATION-PRE" ID="{D0ED51BA-AD00-47E8-848B-6DB13C3BBDE7}" ShortID="765923885">
+									<PropertyList>
+										<Property Name="Tempo" Type="Real64" Value="105"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="EVELYTH-PRESENTATION-PRE" ID="{2BD250FF-2B2C-4CE1-87B1-2E49CEF7F22F}" ShortID="729316032">
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{042BB27E-1F1A-4785-B5F4-BE63948125A4}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EVELYTH-PRESENTATION-PRE" ID="{44C3CB11-B54B-4CC0-846E-3CBE435D8ACC}">
+													<Language>SFX</Language>
+													<AudioFile>EVELYTH-PRESENTATION-PRE.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="330091226"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<MusicTrackSequence Name="" ID="{ACB77139-5C1B-4C49-B9C2-0E3DF99768AA}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<MusicClip Name="EVELYTH-PRESENTATION-PRE" ID="{29DF5F4D-4417-49A7-B4BB-6AB62CA696EE}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="2285.71428571429"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="EVELYTH-PRESENTATION-PRE" ID="{44C3CB11-B54B-4CC0-846E-3CBE435D8ACC}"/>
+																</MusicClip>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<MusicCue Name="Entry Cue" ID="{34A159E5-8BAA-4EDE-B512-DD3D1CDAFC2A}"/>
+											<MusicCue Name="Exit Cue" ID="{62B0832B-3BD2-4E42-AE0F-E4574213FE71}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="2285.71428571429"/>
+												</PropertyList>
+											</MusicCue>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+							</ChildrenList>
+						</MusicPlaylistContainer>
+						<MusicPlaylistContainer Name="TENSE-BATTLE" ID="{68739AD4-ED0D-4396-9374-9B3FD5902603}" ShortID="496099236">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+								</Reference>
+								<Reference Name="PlaylistRoot">
+									<Custom>
+										<MusicPlaylistItem Name="" ID="{DA0F6882-2B1B-4445-A66B-81484EAB43DD}" ShortID="150847586">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{68AD6D74-BB2C-48FE-9A55-0BFBBBB60C21}" ShortID="647780040">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="EVELYTH-BATTLE-TENSE" ID="{2365DAFB-BCDB-45BC-861B-73B8C2DEBEC3}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+												<MusicPlaylistItem Name="" ID="{3E7CCFB5-A932-4EB5-81FC-C43AF175B6B8}" ShortID="4912272">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="EVELYTH-BATTLE-TENSE2" ID="{F1450844-59DA-4EB2-A1E8-7938D79F2863}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
+									</Custom>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{D312B798-6800-48CF-AFED-9D8EFF18B0C3}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{BAA49DB6-1A33-4AC5-8E21-49A9824DE367}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicSegment Name="EVELYTH-BATTLE-TENSE" ID="{2365DAFB-BCDB-45BC-861B-73B8C2DEBEC3}" ShortID="645893530">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="18285.7142857143"/>
+										<Property Name="Tempo" Type="Real64" Value="105"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="EVELYTH-BATTLE-TENSE" ID="{F215A850-BBE3-4F26-84EB-AFD2CE50122E}" ShortID="106127201">
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{47C4D2D3-9C16-4FD8-8EC8-9EFDEF5B1F64}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EVELYTH-BATTLE-TENSE" ID="{E16F1E58-973C-4465-BD4E-96CC14A612E8}">
+													<Language>SFX</Language>
+													<AudioFile>EVELYTH-BATTLE-TENSE.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="788783906"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<MusicTrackSequence Name="" ID="{B51DCA21-747E-4DD4-875A-6F1AE98B1337}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<MusicClip Name="EVELYTH-BATTLE-TENSE" ID="{2E6BB1BE-FDCC-4064-AA62-74D2645F2286}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="18285.7142857143"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="EVELYTH-BATTLE-TENSE" ID="{E16F1E58-973C-4465-BD4E-96CC14A612E8}"/>
+																</MusicClip>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<MusicCue Name="Entry Cue" ID="{5DBB23DE-BE49-46BE-A3D2-BA433BB8C877}"/>
+											<MusicCue Name="Exit Cue" ID="{82F6ED33-A2A8-4595-812A-69D2EA08C492}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="18285.7142857143"/>
+												</PropertyList>
+											</MusicCue>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+								<MusicSegment Name="EVELYTH-BATTLE-TENSE2" ID="{F1450844-59DA-4EB2-A1E8-7938D79F2863}" ShortID="987173362">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="18285.7142857143"/>
+										<Property Name="Tempo" Type="Real64" Value="105"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="EVELYTH-BATTLE-TENSE2" ID="{140968BC-AA49-4B3A-A8E4-D22F189DA90C}" ShortID="298996951">
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{82DDB21C-A5F3-41A9-8C53-DCCF6AD98C60}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EVELYTH-BATTLE-TENSE2" ID="{B023E4AD-DC34-4E5E-B288-E9AE02430A24}">
+													<Language>SFX</Language>
+													<AudioFile>EVELYTH-BATTLE-TENSE2.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="226783484"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<MusicTrackSequence Name="" ID="{FF1FC7EA-8470-46F6-8F9F-03D84A0C2789}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<MusicClip Name="EVELYTH-BATTLE-TENSE2" ID="{76479854-0369-46DC-93C1-A42DAD8083E6}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="18285.7142857143"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="EVELYTH-BATTLE-TENSE2" ID="{B023E4AD-DC34-4E5E-B288-E9AE02430A24}"/>
+																</MusicClip>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<MusicCue Name="Entry Cue" ID="{73788D39-A1A1-43A2-8809-1B4F942E2B1F}"/>
+											<MusicCue Name="Exit Cue" ID="{95919E6F-C024-4A30-9FF6-3919DC6671B6}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="18285.7142857143"/>
+												</PropertyList>
+											</MusicCue>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+							</ChildrenList>
+						</MusicPlaylistContainer>
+						<MusicPlaylistContainer Name="SOFT-BATTLE" ID="{56AF1DFC-5E0C-4D39-B436-CB749063DBB2}" ShortID="778016382">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+								</Reference>
+								<Reference Name="PlaylistRoot">
+									<Custom>
+										<MusicPlaylistItem Name="" ID="{9F5DD165-FAB3-44AC-88E0-C2378EBF3B49}" ShortID="473161435">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{D0B413DF-4BBD-4ABB-AD3E-801D84AECCA6}" ShortID="71088841">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="EVELYTH-BATTLE-SOFT" ID="{37023033-0597-4B3E-B29A-8CDC7C55477D}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
+									</Custom>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{30AA488F-EBA7-4A9C-83FF-0F5417343585}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{8C5FA38C-3D6B-4AC7-8536-2608BA195293}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicSegment Name="EVELYTH-BATTLE-SOFT" ID="{37023033-0597-4B3E-B29A-8CDC7C55477D}" ShortID="214103453">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="18285.6916099773"/>
+										<Property Name="Tempo" Type="Real64" Value="105"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="EVELYTH-BATTLE-SOFT" ID="{BB4AF6FC-F24D-4D68-B431-47FA91B8B4D1}" ShortID="760282585">
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{95197C84-029C-4884-8521-E024CCB9A2D4}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EVELYTH-BATTLE-SOFT" ID="{C5AF7CF6-D923-4014-BC8E-5B8C4341D3C5}">
+													<Language>SFX</Language>
+													<AudioFile>EVELYTH-BATTLE-SOFT.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="994351529"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<MusicTrackSequence Name="" ID="{F0DC91D2-389B-418B-9A30-93995A5100D9}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<MusicClip Name="EVELYTH-BATTLE-SOFT" ID="{A7162339-EAA2-4154-9A32-9D8500C83278}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="18285.6916099773"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="EVELYTH-BATTLE-SOFT" ID="{C5AF7CF6-D923-4014-BC8E-5B8C4341D3C5}"/>
+																</MusicClip>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<MusicCue Name="Entry Cue" ID="{F512C8FD-CA40-4C9B-A7C5-747162E2DF4E}"/>
+											<MusicCue Name="Exit Cue" ID="{D200B1B5-76C3-4C0F-BA47-7674C200F2B7}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="18285.6916099773"/>
+												</PropertyList>
+											</MusicCue>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+							</ChildrenList>
+						</MusicPlaylistContainer>
+						<MusicPlaylistContainer Name="PRESENTATION-MID" ID="{D0082CD0-60F7-4DFA-B54B-1DD41D3FF032}" ShortID="471862409">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+								</Reference>
+								<Reference Name="PlaylistRoot">
+									<Custom>
+										<MusicPlaylistItem Name="" ID="{EFAAEE7B-C950-4E6F-AFCA-308F9B16F4CA}" ShortID="843206845">
+											<PropertyList>
+												<Property Name="LoopCount" Type="int16" Value="0"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicPlaylistItem Name="" ID="{82510FB7-2BD5-440C-9647-B9CFF51BD7FA}" ShortID="420056593">
+													<PropertyList>
+														<Property Name="PlaylistItemType" Type="int16" Value="1"/>
+													</PropertyList>
+													<ReferenceList>
+														<Reference Name="Segment">
+															<ObjectRef Name="EVELYTH-PRESENTATION-MID" ID="{1A7A13E6-B672-49CD-9EA2-EAFB88503B24}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+														</Reference>
+													</ReferenceList>
+												</MusicPlaylistItem>
+											</ChildrenList>
+										</MusicPlaylistItem>
+									</Custom>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{AA6668A3-2A42-49B6-8D30-6F3D6C7B2AB5}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<ChildrenList>
+												<MusicTransition Name="Transition" ID="{0E61359B-2311-4A77-97B6-1E6BE586B87A}">
+													<TransitionInfo/>
+												</MusicTransition>
+											</ChildrenList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicSegment Name="EVELYTH-PRESENTATION-MID" ID="{1A7A13E6-B672-49CD-9EA2-EAFB88503B24}" ShortID="940853444">
+									<PropertyList>
+										<Property Name="EndPosition" Type="Real64" Value="9142.83446712018"/>
+										<Property Name="Tempo" Type="Real64" Value="105"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<MusicTrack Name="EVELYTH-PRESENTATION-MID" ID="{D15C8F24-BD32-4AE7-A56A-28CC0535B596}" ShortID="240294767">
+											<ReferenceList>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+												</Reference>
+												<Reference Name="TransitionRoot">
+													<Custom>
+														<MusicTransition Name="Root" ID="{5805751B-CA00-488C-BF2F-80803E05A41F}">
+															<PropertyList>
+																<Property Name="IsFolder" Type="bool" Value="True"/>
+															</PropertyList>
+															<TransitionInfo/>
+														</MusicTransition>
+													</Custom>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EVELYTH-PRESENTATION-MID" ID="{A00037F5-C3C6-4C8A-B2B0-CBEB87C7FA72}">
+													<Language>SFX</Language>
+													<AudioFile>EVELYTH-PRESENTATION-MID.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="508890794"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ObjectLists>
+												<ObjectList Name="Sequences">
+													<MusicTrackSequence Name="" ID="{06AEA7BE-AFDC-4C94-A517-7D0C830989C9}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<MusicClip Name="EVELYTH-PRESENTATION-MID" ID="{4846A6CB-55E4-4B3E-B3BD-A9ADBE80EEEA}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="9142.83446712018"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="EVELYTH-PRESENTATION-MID" ID="{A00037F5-C3C6-4C8A-B2B0-CBEB87C7FA72}"/>
+																</MusicClip>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</ObjectList>
+											</ObjectLists>
+										</MusicTrack>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Cues">
+											<MusicCue Name="Entry Cue" ID="{7C6AD6A0-54ED-49B1-9374-066B87252E50}"/>
+											<MusicCue Name="Exit Cue" ID="{31CA4238-FCCA-4A80-AF92-60763F271F03}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="9142.83446712018"/>
+												</PropertyList>
+											</MusicCue>
+										</ObjectList>
+									</ObjectLists>
+								</MusicSegment>
+							</ChildrenList>
+						</MusicPlaylistContainer>
+						<MusicSegment Name="EVELYTH-PRESENTATION-POST" ID="{65CA6532-30C2-4F8E-95E7-86180004635C}" ShortID="365797701">
+							<PropertyList>
+								<Property Name="EndPosition" Type="Real64" Value="4571.45124716553"/>
+								<Property Name="Tempo" Type="Real64" Value="105"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicTrack Name="EVELYTH-PRESENTATION-POST" ID="{0AB8F90B-2C5E-4489-A347-3702EB65A23A}" ShortID="807489658">
+									<ReferenceList>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+										</Reference>
+										<Reference Name="TransitionRoot">
+											<Custom>
+												<MusicTransition Name="Root" ID="{5A76B177-2D99-403A-AE35-B947D5FF5392}">
+													<PropertyList>
+														<Property Name="IsFolder" Type="bool" Value="True"/>
+													</PropertyList>
+													<TransitionInfo/>
+												</MusicTransition>
+											</Custom>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="EVELYTH-PRESENTATION-POST" ID="{E9B27877-71E1-4B0A-8667-8AA1F00B0386}">
+											<Language>SFX</Language>
+											<AudioFile>EVELYTH-PRESENTATION-POST.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="534312012"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ObjectLists>
+										<ObjectList Name="Sequences">
+											<MusicTrackSequence Name="" ID="{2CF9BE0D-6980-4FCA-952C-39223F1D6EED}">
+												<ObjectLists>
+													<ObjectList Name="Clips">
+														<MusicClip Name="EVELYTH-PRESENTATION-POST" ID="{368B1731-A554-434B-B257-AC0D257A251C}">
+															<PropertyList>
+																<Property Name="EndTrimOffset" Type="Real64" Value="4571.45124716553"/>
+																<Property Name="FadeInMode" Type="int16" Value="0"/>
+																<Property Name="FadeOutMode" Type="int16" Value="0"/>
+															</PropertyList>
+															<AudioSourceRef Name="EVELYTH-PRESENTATION-POST" ID="{E9B27877-71E1-4B0A-8667-8AA1F00B0386}"/>
+														</MusicClip>
+													</ObjectList>
+												</ObjectLists>
+											</MusicTrackSequence>
+										</ObjectList>
+									</ObjectLists>
+								</MusicTrack>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Cues">
+									<MusicCue Name="Entry Cue" ID="{84858E9D-9203-45CB-9EE2-D396BE15AA61}"/>
+									<MusicCue Name="Exit Cue" ID="{AE7E0D15-DF88-4E9D-9343-9B12AD25B9FF}">
+										<PropertyList>
+											<Property Name="CueType" Type="int16" Value="1"/>
+											<Property Name="TimeMs" Type="Real64" Value="4571.45124716553"/>
+										</PropertyList>
+									</MusicCue>
+								</ObjectList>
+							</ObjectLists>
+						</MusicSegment>
+					</ChildrenList>
+					<StateInfo>
+						<StateGroupList>
+							<StateGroupInfo>
+								<StateGroupRef Name="BATTLE_STATES" ID="{4577AB12-2A88-4904-A039-88DD9A12DE6E}"/>
+								<StateGroupInfo Name="" ID="{BD67512F-0693-4624-B914-83775712F1DF}" ShortID="804037436"/>
+							</StateGroupInfo>
+						</StateGroupList>
+						<CustomStateList>
+							<CustomState>
+								<StateRef Name="BATTLE_SOFT" ID="{03037506-1CA0-41D6-B616-65F6690D56F2}"/>
+								<CustomState Name="" ID="{C57D6A10-F79F-4D72-AAA0-09770DDF0160}" ShortID="586432972"/>
+							</CustomState>
+							<CustomState>
+								<StateRef Name="MID" ID="{58D5D882-61F4-4538-879F-A9ED166B3F61}"/>
+								<CustomState Name="" ID="{65398AF9-22DF-45EF-9D05-62B35B970419}" ShortID="671369334"/>
+							</CustomState>
+							<CustomState>
+								<StateRef Name="None" ID="{FB937E07-5450-4ADC-82BD-DAAA852059AA}"/>
+								<CustomState Name="" ID="{8DC1E3A0-5508-40F8-9A7D-E19809B61F40}" ShortID="6963046"/>
+							</CustomState>
+							<CustomState>
+								<StateRef Name="PRE" ID="{D043C77D-04C2-4B94-9795-11E4EC3C5146}"/>
+								<CustomState Name="" ID="{741BB253-581F-4E6D-8FB7-34EB5734EA6E}" ShortID="672792451"/>
+							</CustomState>
+							<CustomState>
+								<StateRef Name="BATTLE_TENSE" ID="{509DC3B9-9C03-4EAE-B149-1FA0AB59E8A6}"/>
+								<CustomState Name="" ID="{E69AB7F8-30D6-44B7-8402-E5014932A262}" ShortID="973189539"/>
+							</CustomState>
+						</CustomStateList>
+					</StateInfo>
+					<ObjectLists>
+						<ObjectList Name="Arguments">
+							<PluginInnerObject Name="" ID="{0D822022-9B41-4DA0-9274-0D7047FC1759}" PluginName="MusicArgumentsSlot" CompanyID="0" PluginID="89">
+								<ReferenceList>
+									<Reference Name="Argument">
+										<ObjectRef Name="BATTLE_STATES" ID="{4577AB12-2A88-4904-A039-88DD9A12DE6E}" WorkUnitID="{376D2ABA-84A1-4F8E-A31F-CA1B1F9A3988}"/>
+									</Reference>
+								</ReferenceList>
+							</PluginInnerObject>
+						</ObjectList>
+						<ObjectList Name="Entries">
+							<MultiSwitchEntry Name="" ID="{E6A24123-FD96-4A11-8065-0F02C4AF51A1}">
+								<ReferenceList>
+									<Reference Name="AudioNode">
+										<ObjectRef Name="PRESENTATION-PRE" ID="{476A0E72-01E2-42DE-A81E-5EC8B4CEF702}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+									</Reference>
+								</ReferenceList>
+								<ObjectLists>
+									<ObjectList Name="EntryPath">
+										<PluginInnerObject Name="" ID="{A4DB7CB4-F34B-42DB-BCB9-8AB0B03B1301}" PluginName="EntryPathSlot" CompanyID="0" PluginID="88">
+											<ReferenceList>
+												<Reference Name="EntryPathObject">
+													<ObjectRef Name="PRE" ID="{D043C77D-04C2-4B94-9795-11E4EC3C5146}" WorkUnitID="{376D2ABA-84A1-4F8E-A31F-CA1B1F9A3988}"/>
+												</Reference>
+											</ReferenceList>
+										</PluginInnerObject>
+									</ObjectList>
+								</ObjectLists>
+							</MultiSwitchEntry>
+							<MultiSwitchEntry Name="" ID="{18CC9ADF-C458-48E6-A38C-06B8FE4EFB2F}">
+								<ReferenceList>
+									<Reference Name="AudioNode">
+										<ObjectRef Name="PRESENTATION-MID" ID="{D0082CD0-60F7-4DFA-B54B-1DD41D3FF032}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+									</Reference>
+								</ReferenceList>
+								<ObjectLists>
+									<ObjectList Name="EntryPath">
+										<PluginInnerObject Name="" ID="{3F20DCDA-A2E8-4E26-A2AF-1F1B21F17A86}" PluginName="EntryPathSlot" CompanyID="0" PluginID="88">
+											<ReferenceList>
+												<Reference Name="EntryPathObject">
+													<ObjectRef Name="MID" ID="{58D5D882-61F4-4538-879F-A9ED166B3F61}" WorkUnitID="{376D2ABA-84A1-4F8E-A31F-CA1B1F9A3988}"/>
+												</Reference>
+											</ReferenceList>
+										</PluginInnerObject>
+									</ObjectList>
+								</ObjectLists>
+							</MultiSwitchEntry>
+							<MultiSwitchEntry Name="" ID="{5BB2339E-6115-4B06-B169-6AA6D22FE5BF}">
+								<ReferenceList>
+									<Reference Name="AudioNode">
+										<ObjectRef Name="TENSE-BATTLE" ID="{68739AD4-ED0D-4396-9374-9B3FD5902603}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+									</Reference>
+								</ReferenceList>
+								<ObjectLists>
+									<ObjectList Name="EntryPath">
+										<PluginInnerObject Name="" ID="{E5ABB9E0-56B9-4845-B066-4F64A30D7FDB}" PluginName="EntryPathSlot" CompanyID="0" PluginID="88">
+											<ReferenceList>
+												<Reference Name="EntryPathObject">
+													<ObjectRef Name="BATTLE_TENSE" ID="{509DC3B9-9C03-4EAE-B149-1FA0AB59E8A6}" WorkUnitID="{376D2ABA-84A1-4F8E-A31F-CA1B1F9A3988}"/>
+												</Reference>
+											</ReferenceList>
+										</PluginInnerObject>
+									</ObjectList>
+								</ObjectLists>
+							</MultiSwitchEntry>
+							<MultiSwitchEntry Name="" ID="{3D865085-7D08-4138-8719-DA64DFA8CE8A}">
+								<ReferenceList>
+									<Reference Name="AudioNode">
+										<ObjectRef Name="SOFT-BATTLE" ID="{56AF1DFC-5E0C-4D39-B436-CB749063DBB2}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+									</Reference>
+								</ReferenceList>
+								<ObjectLists>
+									<ObjectList Name="EntryPath">
+										<PluginInnerObject Name="" ID="{B82E10F8-0245-4387-8537-22D23C974C9D}" PluginName="EntryPathSlot" CompanyID="0" PluginID="88">
+											<ReferenceList>
+												<Reference Name="EntryPathObject">
+													<ObjectRef Name="BATTLE_SOFT" ID="{03037506-1CA0-41D6-B616-65F6690D56F2}" WorkUnitID="{376D2ABA-84A1-4F8E-A31F-CA1B1F9A3988}"/>
+												</Reference>
+											</ReferenceList>
+										</PluginInnerObject>
+									</ObjectList>
+								</ObjectLists>
+							</MultiSwitchEntry>
+						</ObjectList>
+					</ObjectLists>
+				</MusicSwitchContainer>
+				<RandomSequenceContainer Name="New Random Container" ID="{FAEFDB82-FAFE-4CFC-B753-3096509E0BBC}" ShortID="296234698">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{6FAF0B84-285F-4E23-AC6D-91A4269FA773}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{17937D17-A7EA-4780-849C-152E487FAFD2}"/>
+						</Reference>
+					</ReferenceList>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</Containers>
+</WwiseDocument>

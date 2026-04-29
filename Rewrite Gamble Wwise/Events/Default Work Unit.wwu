@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{4F10E2A0-249F-4DAA-BCF4-C5100965E31A}" SchemaVersion="133">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{4F10E2A0-249F-4DAA-BCF4-C5100965E31A}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="EVELYTH_BATTLE" ID="{B2ED6668-BBB0-43AD-BFF0-B9335EC06501}">
+					<ChildrenList>
+						<Action Name="" ID="{F50458FD-3FBD-48C1-941B-93D3999A1335}" ShortID="613890999">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="EvelythBattle" ID="{A05764BC-BF25-4061-BE1D-0F89999261B1}" WorkUnitID="{13C34537-27A8-4172-8E59-62791B533014}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

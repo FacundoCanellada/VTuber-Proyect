@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c8f7d100789de41bf4d8a3d55d300c, type: 3}
+  m_Name: KnifeAround
+  m_EditorClassIdentifier: Assembly-CSharp::UndertaleEncounter.AttackWaveData
+  projectilePrefab: {fileID: 6007614155693274122, guid: fae309731b072e741ba2d387f43bfd95, type: 3}
+  initialDelay: 1
+  spawnCount: 30
+  spawnInterval: 0.5
+  burstCount: 1
+  burstInterval: 0
+  spawnType: 1
+  fixedPosition: {x: 0, y: 0}
+  spawnRadius: 2
+  spawnAnim: 2
+  spawnAnimDuration: 0.4
+  spawnExtraSpins: 2
+  waitDuration: 0.5
+  waitBehavior: 1
+  warningDuration: 0.4
+  warningColor1: {r: 1, g: 0, b: 0, a: 1}
+  warningColor2: {r: 1, g: 1, b: 0, a: 1}
+  aimType: 1
+  fixedDirection: {x: 1, y: 0}
+  moveType: 0
+  moveSpeed: 5
+  rotateTowardsVelocity: 1
+  homingTurnSpeed: 5
+  sineAmplitude: 0.5
+  sineFrequency: 5
+  boomerangAcceleration: 8
+  spawnSound: {fileID: 0}
+  warningSound: {fileID: 0}
+  shootSound: {fileID: 0}

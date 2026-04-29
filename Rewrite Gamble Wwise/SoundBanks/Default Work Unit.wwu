@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{A0861664-0D27-450F-B560-9F75736A0DBC}" SchemaVersion="133">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{A0861664-0D27-450F-B560-9F75736A0DBC}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="EVELYTH_SOUNDBANK" ID="{FE150146-64DF-4371-8981-1D87941E6C5D}">
+					<ObjectInclusionList>
+						<ObjectRef Name="EVELYTH_BATTLE" ID="{B2ED6668-BBB0-43AD-BFF0-B9335EC06501}" WorkUnitID="{4F10E2A0-249F-4DAA-BCF4-C5100965E31A}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

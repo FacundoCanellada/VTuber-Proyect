@@ -1,0 +1,45 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "4036352786",
+    "Type": "User",
+    "GUID": "{FE150146-64DF-4371-8981-1D87941E6C5D}",
+    "Language": "SFX",
+    "Hash": "{0519C67B-C327-1FB0-4D5A-87E4623CA2D0}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\EVELYTH_SOUNDBANK",
+    "ShortName": "EVELYTH_SOUNDBANK",
+    "Path": "EVELYTH_SOUNDBANK.bnk",
+    "Media": [
+     {
+      "Id": "534312012",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "EVELYTH-PRESENTATION-POST.wav",
+      "CachePath": "84/{84A407D0-03B0-8C49-33D5-328247CDFAD3}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "262293137",
+      "Name": "EVELYTH_BATTLE",
+      "ObjectPath": "\\Events\\Default Work Unit\\EVELYTH_BATTLE",
+      "GUID": "{B2ED6668-BBB0-43AD-BFF0-B9335EC06501}",
+      "DurationType": "Infinite",
+      "MediaRefs": [
+       {
+        "Id": "534312012"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{DF12137A-2DE3-12B3-BFFB-F264295EA51F}"
+ }
+}

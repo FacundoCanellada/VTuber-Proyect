@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="16" SoundBankVersion="172">
+	<SoundBanks>
+		<SoundBank Id="4036352786" Type="User" GUID="{FE150146-64DF-4371-8981-1D87941E6C5D}" Language="SFX" Hash="{1B80CF19-8591-8F0F-EFD1-A139D73B31A0}">
+			<ObjectPath>\SoundBanks\Default Work Unit\EVELYTH_SOUNDBANK</ObjectPath>
+			<ShortName>EVELYTH_SOUNDBANK</ShortName>
+			<Path>EVELYTH_SOUNDBANK.bnk</Path>
+			<Media>
+				<File Id="226783484" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EVELYTH-BATTLE-TENSE2.wav</ShortName>
+					<CachePath>1B/{1BF1652F-5857-9776-AA37-6CAE5F4EB1C0}.wem</CachePath>
+				</File>
+				<File Id="330091226" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EVELYTH-PRESENTATION-PRE.wav</ShortName>
+					<CachePath>2B/{2B77E4ED-3D81-E3D9-1764-9DC35992E9DB}.wem</CachePath>
+				</File>
+				<File Id="508890794" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EVELYTH-PRESENTATION-MID.wav</ShortName>
+					<CachePath>23/{2342A3E2-2553-FA5D-3529-D92CD3497DFE}.wem</CachePath>
+				</File>
+				<File Id="534312012" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EVELYTH-PRESENTATION-POST.wav</ShortName>
+					<CachePath>84/{84A407D0-03B0-8C49-33D5-328247CDFAD3}.wem</CachePath>
+				</File>
+				<File Id="788783906" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EVELYTH-BATTLE-TENSE.wav</ShortName>
+					<CachePath>11/{1119D632-C173-B438-F3EE-E78258622BCB}.wem</CachePath>
+				</File>
+				<File Id="994351529" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EVELYTH-BATTLE-SOFT.wav</ShortName>
+					<CachePath>42/{429481D6-78A8-7DB9-7C7E-91C7EF31F4CE}.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="262293137" Name="EVELYTH_BATTLE" ObjectPath="\Events\Default Work Unit\EVELYTH_BATTLE" GUID="{B2ED6668-BBB0-43AD-BFF0-B9335EC06501}" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="534312012"/>
+					</MediaRefs>
+					<SwitchContainers>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="2113257272" Id="1031230648" GUID="{D043C77D-04C2-4B94-9795-11E4EC3C5146}"/>
+							<MediaRefs>
+								<MediaRef Id="330091226"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="2113257272" Id="1182670505" GUID="{58D5D882-61F4-4538-879F-A9ED166B3F61}"/>
+							<MediaRefs>
+								<MediaRef Id="508890794"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="2113257272" Id="189750295" GUID="{509DC3B9-9C03-4EAE-B149-1FA0AB59E8A6}"/>
+							<MediaRefs>
+								<MediaRef Id="226783484"/>
+								<MediaRef Id="788783906"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="State" GroupId="2113257272" Id="461706614" GUID="{03037506-1CA0-41D6-B616-65F6690D56F2}"/>
+							<MediaRefs>
+								<MediaRef Id="994351529"/>
+							</MediaRefs>
+						</SwitchContainer>
+					</SwitchContainers>
+				</Event>
+			</Events>
+			<StateGroups>
+				<StateGroup Id="2113257272" Name="BATTLE_STATES" ObjectPath="\States\Default Work Unit\BATTLE_STATES" GUID="{4577AB12-2A88-4904-A039-88DD9A12DE6E}">
+					<States>
+						<State Id="189750295" Name="BATTLE_TENSE" ObjectPath="\States\Default Work Unit\BATTLE_STATES\BATTLE_TENSE" GUID="{509DC3B9-9C03-4EAE-B149-1FA0AB59E8A6}"/>
+						<State Id="461706614" Name="BATTLE_SOFT" ObjectPath="\States\Default Work Unit\BATTLE_STATES\BATTLE_SOFT" GUID="{03037506-1CA0-41D6-B616-65F6690D56F2}"/>
+						<State Id="748895195" Name="None" ObjectPath="\States\Default Work Unit\BATTLE_STATES\None" GUID="{FB937E07-5450-4ADC-82BD-DAAA852059AA}"/>
+						<State Id="1031230648" Name="PRE" ObjectPath="\States\Default Work Unit\BATTLE_STATES\PRE" GUID="{D043C77D-04C2-4B94-9795-11E4EC3C5146}"/>
+						<State Id="1182670505" Name="MID" ObjectPath="\States\Default Work Unit\BATTLE_STATES\MID" GUID="{58D5D882-61F4-4538-879F-A9ED166B3F61}"/>
+					</States>
+				</StateGroup>
+			</StateGroups>
+		</SoundBank>
+	</SoundBanks>
+	<FileHash>{9B18A95F-2C5D-2645-D8CA-3E86BFCB1E76}</FileHash>
+</SoundBanksInfo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo>
+	<Project Name="Rewrite Gamble Wwise" GUID="{2D97001A-7F3C-4A39-9A20-34E51B1A7D88}" Generator="2025.1.7.9143"/>
+	<CacheRoot>../../../Rewrite Gamble Wwise/.cache</CacheRoot>
+	<Platforms>
+		<Platform Name="Windows" GUID="{128B8494-4E74-4DEC-A478-28FA0A9ED9F5}" BasePlatform="Windows" BasePlatformGUID="{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}" Path="Windows"/>
+	</Platforms>
+	<Languages>
+		<Language Name="English(US)" Id="684519430" GUID="{8F15C05A-C981-4E2A-B34B-F6B43C2057C0}" Default="true" UseAsStandIn="true"/>
+	</Languages>
+	<FileHash>{5CA18BBE-33A6-86C8-83DC-76AB6D4EC206}</FileHash>
+</ProjectInfo>

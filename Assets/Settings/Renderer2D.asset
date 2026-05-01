@@ -26,7 +26,8 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
   - {fileID: 1535458352178950568}
-  m_RendererFeatureMap: a87108713c0b4f15
+  - {fileID: 3978563807597027396}
+  m_RendererFeatureMap: a87108713c0b4f1544e00b24b4b23637
   m_UseNativeRenderPass: 0
   m_LayerMask:
     serializedVersion: 2
@@ -70,3 +71,23 @@ MonoBehaviour:
   m_Name: CubismRenderPassFeature
   m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Rendering.URP.CubismRenderPassFeature
   m_Active: 1
+--- !u!114 &3978563807597027396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
+  m_Name: FullScreenPassRendererFeature
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
+  m_Active: 1
+  injectionPoint: 550
+  fetchColorBuffer: 1
+  requirements: 0
+  passMaterial: {fileID: 2100000, guid: 83778248adaca7d47aee198db252daad, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1

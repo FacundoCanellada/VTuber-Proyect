@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Soul
+  - Projectile
+  - GlobalHeart
   layers:
   - Default
   - TransparentFX
@@ -11,7 +14,7 @@ TagManager:
   - Character
   - Water
   - UI
-  - 
+  - Live2D
   - 
   - 
   - 
@@ -43,3 +46,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []

@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "com.antigravity.ide": "https://github.com/billythekidz/UnityAntigravityIDE.git",
     "com.audiokinetic.wwise.addressables": "https://github.com/audiokinetic/WwiseUnityAddressables.git#v25.1.7",
+    "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
     "com.unity.2d.animation": "14.0.3",
     "com.unity.2d.aseprite": "4.0.1",
     "com.unity.2d.psdimporter": "13.0.2",

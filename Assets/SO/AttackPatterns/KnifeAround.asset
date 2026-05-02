@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackPatternData
   patternDuration: 7
   clearProjectilesOnEnd: 1
+  targetBoxSize: {x: 15, y: 4}
+  targetBoxPosition: {x: 0, y: -0.4, z: 0}
   waves:
   - {fileID: 11400000, guid: 4a6d4a28d9a52ec47a07a28cda31c064, type: 2}

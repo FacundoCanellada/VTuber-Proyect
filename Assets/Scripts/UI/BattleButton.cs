@@ -12,14 +12,14 @@ namespace UndertaleEncounter
         [Header("Heart Position")]
         public RectTransform heartAnchor; // The "heart child" empty or icon
 
-        private Image _buttonImage;
+        protected Image _buttonImage;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _buttonImage = GetComponent<Image>();
         }
 
-        public void SetFocused(bool isFocused)
+        public virtual void SetFocused(bool isFocused, bool instant = false)
         {
             if (_buttonImage != null)
             {
@@ -27,7 +27,6 @@ namespace UndertaleEncounter
                 Debug.Log($"[BattleButton] {gameObject.name} focused: {isFocused}. Sprite set to: {(_buttonImage.sprite != null ? _buttonImage.sprite.name : "null")}");
             }
 
-            // If the user wants to just toggle the child heart:
             if (heartAnchor != null)
             {
                 heartAnchor.gameObject.SetActive(isFocused);

@@ -10,6 +10,7 @@ namespace UndertaleEncounter
 
         [Header("Settings")]
         [SerializeField] private Vector2 defaultSize = new Vector2(17, 4);
+        [SerializeField] private Vector3 defaultPosition = Vector3.zero;
         [SerializeField] private Vector2 boxSize = new Vector2(17, 4); 
         [SerializeField] private float resizeSpeed = 10.0f;
         [SerializeField] private float thickness = 0.05f;
@@ -39,28 +40,36 @@ namespace UndertaleEncounter
             }
         }
 
-        public void SetSize(Vector2 newSize, bool animate = true)
+        public void SetTransform(Vector2 newSize, Vector3 newPos, bool animate = true)
         {
             if (!animate)
             {
                 boxSize = newSize;
+                transform.position = newPos;
                 UpdateBoxLayout();
                 return;
             }
 
             if (_resizeCoroutine != null) StopCoroutine(_resizeCoroutine);
-            _resizeCoroutine = StartCoroutine(ResizeRoutine(newSize));
+            _resizeCoroutine = StartCoroutine(ResizeRoutine(newSize, newPos));
         }
 
-        private IEnumerator ResizeRoutine(Vector2 targetSize)
+        public void SetSize(Vector2 newSize, bool animate = true)
         {
-            while (Vector2.Distance(boxSize, targetSize) > 0.001f)
+            SetTransform(newSize, transform.position, animate);
+        }
+
+        private IEnumerator ResizeRoutine(Vector2 targetSize, Vector3 targetPos)
+        {
+            while (Vector2.Distance(boxSize, targetSize) > 0.001f || Vector3.Distance(transform.position, targetPos) > 0.001f)
             {
                 boxSize = Vector2.Lerp(boxSize, targetSize, Time.deltaTime * resizeSpeed);
+                transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * resizeSpeed);
                 UpdateBoxLayout();
                 yield return null;
             }
             boxSize = targetSize;
+            transform.position = targetPos;
             UpdateBoxLayout();
             _resizeCoroutine = null;
         }
@@ -159,7 +168,7 @@ namespace UndertaleEncounter
 
         public void ResetToDefault(bool animate = true)
         {
-            SetSize(defaultSize, animate);
+            SetTransform(defaultSize, defaultPosition, animate);
         }
 
         public Vector2 GetSize() => boxSize;

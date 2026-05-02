@@ -25,8 +25,8 @@ namespace UndertaleEncounter
             var box = manager.GetBattleBox();
             if (box != null)
             {
-                // Unidades reales, con animación
-                box.SetSize(new Vector2(17f, 4f), true); 
+                // Vuelve al tamaño y posición por defecto con animación
+                box.ResetToDefault(true); 
                 StartCoroutine(WaitAndActivateUI(box));
             }
             else

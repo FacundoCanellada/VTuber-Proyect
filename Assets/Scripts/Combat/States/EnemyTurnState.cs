@@ -19,19 +19,6 @@ namespace UndertaleEncounter
                 InputReader.Instance.EnableSoulMode();
             }
 
-            var box = manager.GetBattleBox();
-            if (box != null)
-            {
-                box.SetSize(new Vector2(4, 4));
-            }
-
-            var soul = manager.GetSoul();
-            if (soul != null && box != null)
-            {
-                soul.gameObject.SetActive(true);
-                box.CenterSoul();
-            }
-
             StartEnemyPattern();
         }
 
@@ -61,7 +48,21 @@ namespace UndertaleEncounter
 
             Debug.Log($"[EnemyTurnState] Running pattern from {selectedEnemy.enemyName}: {selectedPattern.name}");
 
-            Vector3 boxPos = manager.GetBattleBox() != null ? manager.GetBattleBox().transform.position : Vector3.zero;
+            // Resize and move the battle box according to the pattern
+            var box = manager.GetBattleBox();
+            if (box != null)
+            {
+                box.SetTransform(selectedPattern.targetBoxSize, selectedPattern.targetBoxPosition, true);
+            }
+
+            var soul = manager.GetSoul();
+            if (soul != null && box != null)
+            {
+                soul.gameObject.SetActive(true);
+                box.CenterSoul();
+            }
+
+            Vector3 boxPos = box != null ? box.transform.position : Vector3.zero;
             GameObject runnerObj = Instantiate(patternRunnerPrefab, boxPos, Quaternion.identity);
             var runner = runnerObj.GetComponent<PatternRunner>();
             

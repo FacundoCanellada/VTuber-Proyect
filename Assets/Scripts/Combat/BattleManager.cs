@@ -67,8 +67,6 @@ namespace UndertaleEncounter
             {
                 Debug.Log($"[BattleManager] Aparece: {enemyData.enemyName}");
                 _activeEnemies.Add(new EnemyInstance(enemyData));
-                // Aquí podrías instanciar un prefab si enemyData tuviera uno:
-                // Instantiate(enemyData.prefab, enemySpawnParent);
             }
         }
 

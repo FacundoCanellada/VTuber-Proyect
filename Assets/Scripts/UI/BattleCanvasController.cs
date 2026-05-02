@@ -92,6 +92,8 @@ namespace UndertaleEncounter
 
         public void OpenMainMenu()
         {
+            bool instant = (_state == MenuState.DIALOGUE_ONLY);
+
             actionButtonsContainer.SetActive(true);
             vSelectContainer.gameObject.SetActive(false);
             gridSelectContainer.gameObject.SetActive(false);
@@ -100,7 +102,7 @@ namespace UndertaleEncounter
             _state = MenuState.MAIN;
             _currentMenuButtons = _mainButtons;
             
-            UpdateSelection(_savedMainIndex);
+            UpdateSelection(_savedMainIndex, instant);
         }
 
         public void OpenEnemySelect(List<EnemyInstance> enemies)
@@ -122,7 +124,11 @@ namespace UndertaleEncounter
 
             _state = MenuState.ENEMY_SELECT;
             
-            foreach (Transform child in vSelectContainer) Destroy(child.gameObject);
+            foreach (Transform child in vSelectContainer)
+            {
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
             _currentMenuButtons = new List<BattleButton>();
 
             foreach (var enemy in enemies)
@@ -144,6 +150,7 @@ namespace UndertaleEncounter
                 }
             }
 
+            Canvas.ForceUpdateCanvases();
             UpdateSelection(0);
         }
 
@@ -172,7 +179,11 @@ namespace UndertaleEncounter
             _state = nextState;
             container.gameObject.SetActive(true);
             
-            foreach (Transform child in container) Destroy(child.gameObject);
+            foreach (Transform child in container)
+            {
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
             _currentMenuButtons = new List<BattleButton>();
 
             foreach (var label in labels)
@@ -184,6 +195,7 @@ namespace UndertaleEncounter
                 if (bbtn != null) _currentMenuButtons.Add(bbtn);
             }
 
+            Canvas.ForceUpdateCanvases();
             UpdateSelection(0);
         }
 
@@ -194,6 +206,9 @@ namespace UndertaleEncounter
             gridSelectContainer.gameObject.SetActive(false);
             foreach (var b in _mainButtons) b.SetFocused(false);
             _state = MenuState.DIALOGUE_ONLY;
+
+            GameObject heart = GameObject.FindGameObjectWithTag("GlobalHeart");
+            if (heart != null) heart.SetActive(false);
         }
 
         #endregion
@@ -267,12 +282,12 @@ namespace UndertaleEncounter
 
         #endregion
 
-        private void UpdateSelection(int index)
+        private void UpdateSelection(int index, bool instant = false)
         {
             _currentIndex = index;
             for (int i = 0; i < _currentMenuButtons.Count; i++)
             {
-                _currentMenuButtons[i].SetFocused(i == index);
+                _currentMenuButtons[i].SetFocused(i == index, instant);
             }
         }
 

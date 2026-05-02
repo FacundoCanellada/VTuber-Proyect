@@ -4,7 +4,7 @@ using TMPro;
 
 namespace UndertaleEncounter
 {
-    public class EnemySelectButton : BattleButton
+    public class EnemySelectButton : AnimatedBattleButton
     {
         [Header("Enemy UI")]
         public TextMeshProUGUI nameText;
@@ -14,7 +14,10 @@ namespace UndertaleEncounter
 
         public void Setup(EnemyInstance enemy)
         {
-            if (nameText != null) nameText.text = "* " + enemy.enemyName;
+            if (nameText != null) 
+            {
+                nameText.text = "* " + enemy.enemyName;
+            }
             
             if (healthBar != null)
             {

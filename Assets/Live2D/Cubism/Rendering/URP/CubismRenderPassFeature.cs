@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -672,7 +672,8 @@ namespace Live2D.Cubism.Rendering.URP
 
                         // Clear the common rendering texture for the next group.
                         _commandBuffer.SetRenderTarget(data.CommonRenderingTextureHandle);
-                        _commandBuffer.ClearRenderTarget(true, true, Color.clear);
+                        _commandBuffer.ClearRenderTarget(true, false, Color.clear); // CLEAR COLOR FALSO LA PTM
+                        _commandBuffer.Blit(data.CameraTextureHandle, data.CommonRenderingTextureHandle); // Info anterior de pantalla
                     }
                 }
 
@@ -729,20 +730,15 @@ namespace Live2D.Cubism.Rendering.URP
                     _blitRenderTextureMaterial = new Material(CubismBuiltinMaterials.UnlitBlit);
                 }
 
-#if UNITY_EDITOR
-                // HACK: In the editor, Scene view camera may not have the latest texture data.
-                if (data.CameraData.isSceneViewCamera)
-                {
-                    _commandBuffer.Blit(data.CameraTextureHandle, data.CommonRenderingTextureHandle);
-                }
-#endif
+                // Volver a colocar el resultado visual anterior
+                _commandBuffer.Blit(data.CameraTextureHandle, data.CommonRenderingTextureHandle);
 
                 // Sort the renderers by their sorting order.
                 SortingRendererGroups(data);
 
                 // Set render target with both color and depth buffers for proper depth testing
                 _commandBuffer.SetRenderTarget(data.CommonRenderingTextureHandle, data.CameraDepthTextureHandle);
-                _commandBuffer.ClearRenderTarget(false, true, Color.clear);
+                _commandBuffer.ClearRenderTarget(false, false, Color.clear); // POR QUE OTRA VEZ ESTABA EN TRUE LOS ODIO
 
                 // Draw the objects.
                 DrawObjects(_commandBuffer, data);

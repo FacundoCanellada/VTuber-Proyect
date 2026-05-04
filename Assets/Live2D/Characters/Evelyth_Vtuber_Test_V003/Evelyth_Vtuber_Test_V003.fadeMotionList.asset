@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403ae2dd693bb1d4b924f6b8d206b053, type: 3}
+  m_Name: Evelyth_Vtuber_Test_V003.fadeMotionList
+  m_EditorClassIdentifier: Live2D.Cubism::Live2D.Cubism.Framework.MotionFade.CubismFadeMotionList
+  MotionInstanceIds: 5816ffff3a15ffffc215ffff0af0fdff
+  CubismFadeMotionObjects:
+  - {fileID: 11400000, guid: cdcd86b95be540d40ae7771cc7afd2ae, type: 2}
+  - {fileID: 11400000, guid: b891477879828ea4daad70835c71e2ad, type: 2}
+  - {fileID: 11400000, guid: 4eaf34ddb5eb8f644b6f50df5e2dec80, type: 2}
+  - {fileID: 11400000, guid: 14fa07c415b3a62438226d3155947dcc, type: 2}
